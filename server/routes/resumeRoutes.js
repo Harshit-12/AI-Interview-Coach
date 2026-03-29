@@ -40,15 +40,19 @@ router.post("/upload-resume", upload.single("resume"), async (req, res) => {
     };
 
     const cleanedProfile = cleanJson(profile);
-    res.json({
+    
+    const details  =  res.json({
       resumeText: textContent,
       candidateProfile: JSON.parse(cleanedProfile),
       message: "Resume analyzed successfully"
     });
+    
+    console.log(details);
+    return details;
 
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Resume analysis failed" });
+    return res.status(500).json({ error: "Resume analysis failed" });
   }
 });
 
