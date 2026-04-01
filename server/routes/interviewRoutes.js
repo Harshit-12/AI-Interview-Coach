@@ -6,10 +6,12 @@ const router = express.Router();
 const cleanJson = (text) =>
   text.replace(/```json|```/g, "").trim();
 
+
+
 router.post("/startInterview", async (req, res) => {
   try {
     const { profile, surveyAnswers } = req.body;
-
+    console.log("StartInterview route clicked");
     const questionsText = await generateInterviewQuestions(
       profile,
       surveyAnswers

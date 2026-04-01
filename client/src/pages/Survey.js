@@ -41,7 +41,7 @@ function Survey() {
         { question: "Strengths", answer: form.strengths },
         { question: "Weaknesses", answer: form.weaknesses }
       ];
-
+      console.log(survey);
       //  create session in DB
       const res = await API.post("/session/create", {
         profile,
@@ -49,10 +49,10 @@ function Survey() {
       });
 
       const sessionId = res.data.sessionId;
-
+      console.log("my survey " + survey);
       // store sessionId for interview
       localStorage.setItem("sessionId", sessionId);
-
+      localStorage.setItem("survey", JSON.stringify(survey));
       // navigate to interview page
       navigate("/interview");
 
