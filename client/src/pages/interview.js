@@ -91,7 +91,9 @@ const handleSend = async () => {
     // console.log("Survey :", surveyAnswers);
     const qRes = await API.post("/interview/startInterview", {
       profile,
-      survey
+      survey,
+      previousQuestion: currentQuestion,
+      previousAnswer: userAnswer
     });
     console.log("Query Response : "+ qRes);
     const nextQuestion = qRes.data.questions?.[0];

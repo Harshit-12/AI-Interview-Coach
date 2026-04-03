@@ -10,11 +10,13 @@ const cleanJson = (text) =>
 
 router.post("/startInterview", async (req, res) => {
   try {
-    const { profile, surveyAnswers } = req.body;
+    const { profile, surveyAnswers, previousQuestion, previousAnswer } = req.body;
     console.log("StartInterview route clicked");
     const questionsText = await generateInterviewQuestions(
       profile,
-      surveyAnswers
+      surveyAnswers,
+      previousQuestion,
+      previousAnswer
     );
 
     const questions = JSON.parse(cleanJson(questionsText));
