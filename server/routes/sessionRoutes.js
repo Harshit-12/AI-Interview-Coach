@@ -58,15 +58,15 @@ router.get("/:sessionId", async(req,res) =>{
     const {sessionId} = req.params;
 
     const session = await InterviewSession.findById(sessionId);
-
+    console.log("session details "+ session);
     if (!session){
       return res.status(404).json({error : "SessionId not found"});
     }
 
-    res.json(session);
+    return res.json(session);
   } catch (error) {
     console.error(error);
-    res.status(500).json({error: "Failed to fetch session"});
+    return res.status(500).json({error: "Failed to fetch session"});
   }
 })
 

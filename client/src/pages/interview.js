@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import API from "../services/api";
+import {useNavigate} from "react-router-dom";
 
 function Interview() {
   const [messages, setMessages] = useState([]);
@@ -9,14 +10,14 @@ function Interview() {
 
   const survey = JSON.parse(localStorage.getItem("survey"));
   const sessionId = localStorage.getItem("sessionId");
-
+  const navigate = useNavigate();
   useEffect(() => {
     startInterview();
   }, []);
 
-  // 🔥 Start Interview
+  //  Start Interview
   const startInterview = () => {
-    const greeting = "Hi! 👋 Let's start your interview.\nTell me about yourself.";
+    const greeting = "Hi! Let's start the interview.\nCould you please tell me about yourself.";
 
     setMessages([
       { sender: "ai", text: greeting }
@@ -24,43 +25,12 @@ function Interview() {
       setCurrentQuestion(greeting); 
   };
 
-  // 🔥 Handle User Answer
-//   const handleSend = async () => {
-//     if (!input) return;
+// finish interview 
+const handleEndInterview = async()=>{
+   navigate("/evaluation"); 
+}
 
-//     const userMessage = { sender: "user", text: input };
-
-//     setMessages((prev) => [...prev, userMessage]);
-
-//     // 1️⃣ Evaluate answer
-//     const evalRes = await API.post("/evaluation/evaluate", {
-//       question: messages[messages.length - 1]?.text,
-//       answer: input,
-//       profile
-//     });
-
-//     // 2️⃣ Save to DB
-//     await API.post("/session/add-response", {
-//       sessionId,
-//       question: messages[messages.length - 1]?.text,
-//       answer: input,
-//       evaluation: evalRes.data.evaluation
-//     });
-
-//     // 3️⃣ Generate next question
-//     const qRes = await API.post("/startInterview", {
-//       profile,
-//       surveyAnswers
-//     });
-
-//     const nextQuestion = qRes.data.questions[0];
-//     console.log(nextQuestion);
-//     const aiMessage = { sender: "ai", text: nextQuestion };
-
-//     setMessages((prev) => [...prev, aiMessage]);
-//     setInput("");
-//   };
-
+// submit response
 const handleSend = async () => {
   if (!input) return;
 
@@ -73,7 +43,7 @@ const handleSend = async () => {
     console.log("Inside the handleSend");
     //  Evaluate answer
     const evalRes = await API.post("/evaluation/evaluate", {
-      question: currentQuestion,   // ✅ FIXED
+      question: currentQuestion,   // 
       answer: userAnswer,
       profile
     });
@@ -81,7 +51,7 @@ const handleSend = async () => {
     // Save to DB
     await API.post("/session/add-response", {
       sessionId,
-      question: currentQuestion,   // ✅ FIXED
+      question: currentQuestion,   // FIXED
       answer: userAnswer,
       evaluation: evalRes.data.evaluation
     });
@@ -138,6 +108,9 @@ const handleSend = async () => {
       />
 
       <button onClick={handleSend}>Send</button>
+      <button onClick={handleEndInterview} style={{ marginLeft: "50px", marginTop: "20px" }}>
+        End Interview
+      </button>
     </div>
   );
 }
