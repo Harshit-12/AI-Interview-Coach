@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import API from "../services/api";
-import {useNavigate} from "react-router-dom";
-
+import { useParams} from "react-router-dom";
 function Evaluation() {
   const [session, setSession] = useState(null);
 
-  const sessionId = localStorage.getItem("sessionId");
-    const navigate = useNavigate();
+//   const sessionId = localStorage.getItem("sessionId");
+    const {sessionId} = useParams();
+   
   useEffect(() => {
     fetchSession();
   }, []);

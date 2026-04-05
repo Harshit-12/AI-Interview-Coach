@@ -30,19 +30,9 @@ const handleEndInterview = async()=>{
    navigate("/evaluation"); 
 }
 
-// submit response
-const handleSend = async () => {
-  if (!input) return;
-
-  const userAnswer = input;
-
-  // show user message immediately
-  setMessages((prev) => [...prev, { sender: "user", text: userAnswer }]);
-
-  try {
-    console.log("Inside the handleSend");
-    //  Evaluate answer
-    const evalRes = await API.post("/evaluation/evaluate", {
+const handleEvaluation = async (userAnswer, profile) => {
+try {
+  const evalRes = await API.post("/evaluation/evaluate", {
       question: currentQuestion,   // 
       answer: userAnswer,
       profile
@@ -55,6 +45,37 @@ const handleSend = async () => {
       answer: userAnswer,
       evaluation: evalRes.data.evaluation
     });
+} catch (error) {
+  console.error("Evaluation Error:", error);
+}
+
+}   
+// submit response
+const handleSend = async () => {
+  if (!input) return;
+
+  const userAnswer = input;
+
+  // show user message immediately
+  setMessages((prev) => [...prev, { sender: "user", text: userAnswer }]);
+
+  try {
+    console.log("Inside the handleSend");
+    //  Evaluate answer
+    // const evalRes = await API.post("/evaluation/evaluate", {
+    //   question: currentQuestion,   // 
+    //   answer: userAnswer,
+    //   profile
+    // });
+
+    // // Save to DB
+    // await API.post("/session/add-response", {
+    //   sessionId,
+    //   question: currentQuestion,   // FIXED
+    //   answer: userAnswer,
+    //   evaluation: evalRes.data.evaluation
+    // });
+    handleEvaluation();
 
     //  Generate next question
     console.log("before next question");
