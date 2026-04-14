@@ -38,8 +38,21 @@ function Login() {
         onChange={(e) => setPassword(e.target.value)}
       />
 
-      <button onClick={handleLogin}>Login</button>
-    </div>
+    
+
+       <button onClick={handleLogin}>Login</button>
+
+      <p>
+      Don't have an account?{" "}
+      <span
+      onClick={() => navigate("/signup")}
+      style={{ color: "blue", cursor: "pointer" }}
+      >
+    Signup
+  </span>
+</p>
+    
+     </div>
   );
 }
 

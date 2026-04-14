@@ -7,6 +7,7 @@ import Survey from "./pages/Survey";
 import Interview from "./pages/interview";
 import Evaluation from "./pages/Evaluation";
 import MyInterviews from "./pages/MyInterviews";
+import Evaluate from "./pages/Evaluate";
 function App() {
   return (
     <Router>
@@ -17,6 +18,7 @@ function App() {
         <Route path="/upload" element={<UploadResume />} />
         <Route path="/survey" element={<Survey />} />
         <Route path="/interview" element={<Interview/>} />
+        <Route path="/evaluate" element={<Evaluate />} />
         <Route path="/evaluation/:sessionId" element={<Evaluation />} />
         <Route path="/my-interviews" element={<MyInterviews />} />
       </Routes>

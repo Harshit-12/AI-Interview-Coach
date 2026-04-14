@@ -7,7 +7,7 @@ function Interview() {
   const [input, setInput] = useState("");
   const [currentQuestion, setCurrentQuestion] = useState("");
   const profile = JSON.parse(localStorage.getItem("profile"));
-
+  const [currentAnswer, setcurrentAnswer] = useState("");
   const survey = JSON.parse(localStorage.getItem("survey"));
   const sessionId = localStorage.getItem("sessionId");
   const navigate = useNavigate();
@@ -23,39 +23,22 @@ function Interview() {
       { sender: "ai", text: greeting }
     ]);
       setCurrentQuestion(greeting); 
+      setcurrentAnswer(currentAnswer);
   };
 
 // finish interview 
 const handleEndInterview = async()=>{
-   navigate("/evaluation"); 
+   navigate("/evaluate"); 
 }
 
-const handleEvaluation = async (userAnswer, profile) => {
-try {
-  const evalRes = await API.post("/evaluation/evaluate", {
-      question: currentQuestion,   // 
-      answer: userAnswer,
-      profile
-    });
 
-    // Save to DB
-    await API.post("/session/add-response", {
-      sessionId,
-      question: currentQuestion,   // FIXED
-      answer: userAnswer,
-      evaluation: evalRes.data.evaluation
-    });
-} catch (error) {
-  console.error("Evaluation Error:", error);
-}
 
-}   
 // submit response
 const handleSend = async () => {
   if (!input) return;
 
   const userAnswer = input;
-
+  setcurrentAnswer(userAnswer);
   // show user message immediately
   setMessages((prev) => [...prev, { sender: "user", text: userAnswer }]);
 
@@ -75,7 +58,9 @@ const handleSend = async () => {
     //   answer: userAnswer,
     //   evaluation: evalRes.data.evaluation
     // });
-    handleEvaluation();
+
+ 
+    const evaluation = await handleEvaluation(userAnswer, profile);
 
     //  Generate next question
     console.log("before next question");
@@ -86,6 +71,8 @@ const handleSend = async () => {
       previousQuestion: currentQuestion,
       previousAnswer: userAnswer
     });
+
+    console.log("Evaluation Result : "+ evaluation);
     console.log("Query Response : "+ qRes);
     const nextQuestion = qRes.data.questions?.[0];
     console.log("Next Question : "+ nextQuestion);
@@ -105,11 +92,35 @@ const handleSend = async () => {
 
     // clear input
     setInput("");
-
+    setcurrentAnswer(currentAnswer);
   } catch (error) {
     console.error("Error:", error);
   }
 };
+
+
+// Evaluate answer and save to DB
+const handleEvaluation = async (userAnswer, profile) => {
+  try {
+      const evalRes = await API.post("/evaluation/evaluate", {
+      question: currentQuestion,   // 
+      answer: userAnswer,
+      profile
+    });
+
+    console.log("current Answers before add response " + userAnswer);
+    // Save to DB
+     await API.post("/session/add-response", {
+      sessionId,
+      question: currentQuestion,   // FIXED
+      answer: userAnswer,
+      evaluation: evalRes.data.evaluation
+    });
+    } catch (error) {
+      console.error("Evaluation Error:", error);
+    }
+
+}
   return (
     <div>
       <h2>AI Interview</h2>

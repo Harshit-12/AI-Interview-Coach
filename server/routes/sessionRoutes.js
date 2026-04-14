@@ -50,6 +50,30 @@ router.post("/create", protect, async (req, res) => {
     res.status(500).json({ error: "Failed to create session" });
   }
 });
+
+  router.get("/check-profile", protect, async (req, res) => {
+  try {
+    const session = await InterviewSession.findOne({
+      userId: req.user.userId
+    }).sort({ createdAt: -1 });
+
+    if (!session) {
+      return res.json({
+        hasProfile: false
+      });
+    }
+
+    return res.json({
+      hasProfile: true,
+      profile: session.profile,
+      sessionId: session._id
+    });
+
+  } catch (error) {
+    res.status(500).json({ error: "Failed to check profile" });
+  }
+});
+
 // Get an Interview Session
 
 router.get("/:sessionId", async(req,res) =>{
