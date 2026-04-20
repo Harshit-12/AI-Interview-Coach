@@ -6,14 +6,23 @@ function Interview() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [currentQuestion, setCurrentQuestion] = useState("");
-  const profile = JSON.parse(localStorage.getItem("profile"));
+  // const profile = JSON.parse(localStorage.getItem("profile"));
   const [currentAnswer, setcurrentAnswer] = useState("");
   const survey = JSON.parse(localStorage.getItem("survey"));
   const sessionId = localStorage.getItem("sessionId");
+  const [profile, setProfile] = useState(null);
   const navigate = useNavigate();
   useEffect(() => {
-    startInterview();
+    const initializeInterview = async () => {
+      const fetchedProfile = await fetchProfile();
+      setProfile(fetchedProfile);
+      startInterview();
+    };
+    initializeInterview();  
   }, []);
+
+
+
 
   //  Start Interview
   const startInterview = () => {
@@ -26,11 +35,31 @@ function Interview() {
       setcurrentAnswer(currentAnswer);
   };
 
+
+
 // finish interview 
 const handleEndInterview = async()=>{
    navigate("/evaluate"); 
 }
 
+// Fetch User Profile 
+
+const fetchProfile = async () => {
+  try {
+    const res = await API.get("/profile");
+
+    const profile = res.data.profile;
+    setProfile(profile);
+    // optional: store temporarily
+    localStorage.setItem("profile", JSON.stringify(profile));
+
+    return profile;
+
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};
 
 
 // submit response

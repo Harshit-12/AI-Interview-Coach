@@ -21,8 +21,8 @@ const surveySchema = new mongoose.Schema({
 
 const interviewSessionSchema = new mongoose.Schema(
   {
-    userId: { type: String, default: null }, // for future auth
-    profile: Object, // extracted profile
+    userId: { type: Object, ref: "User" }, // for future auth
+    // Removed user profile fields since we will fetch from UserProfile model
     survey: [surveySchema],
     interviewHistory: [interviewHistorySchema]
   },

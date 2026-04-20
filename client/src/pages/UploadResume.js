@@ -31,6 +31,9 @@ function UploadResume() {
         JSON.stringify(res.data.candidateProfile)
       );
 
+      // const userData = await API.post("user/user-Profile");
+      
+
       navigate("/survey");
 
     } catch (error) {

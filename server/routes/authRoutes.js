@@ -2,6 +2,8 @@ import express from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../models/user.js";
+// import userProfile from "../models/UserProfile.js";
+import UserProfile from "../models/UserProfile.js";
 
 const router = express.Router();
 
@@ -13,7 +15,7 @@ router.post("/signup", async (req,res) =>{
         console.log("Registration test");
         const {userName, email, password} = req.body;
         // console.log(userName);
-        const existingUser = await User.findOne({email});
+        const existingUser = await UserProfile.findOne({email});
 
         if (existingUser){
             res.status(400).json({error: "User already exist"});

@@ -32,7 +32,6 @@ router.post("/create", protect, async (req, res) => {
     console.log("User id : "+ usuerDetails);
     const newSession = new InterviewSession({
       userId: req.user.userId,
-      profile,
       survey,
       interviewHistory: []  // empty initially
     });

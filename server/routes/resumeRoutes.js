@@ -2,13 +2,14 @@ import express from "express";
 import multer from "multer";
 import fs from "fs";
 import * as pdfjsLib from "pdfjs-dist/legacy/build/pdf.mjs";
-
+import UserProfile from "../models/UserProfile.js";
+import { protect } from "../middleware/authMiddleware.js";
 const router = express.Router(); 
 import { extractCandidateProfile } from "../services/profileExtractor.js";
 
 const upload = multer({ dest: "uploads/" });
 
-router.post("/upload-resume", upload.single("resume"), async (req, res) => {
+router.post("/upload-resume", protect , upload.single("resume"), async (req, res) => {
   try {
 
      if (!req.file) {
@@ -41,7 +42,26 @@ router.post("/upload-resume", upload.single("resume"), async (req, res) => {
 
     const cleanedProfile = cleanJson(profile);
     
-    const details  =  res.json({
+    const profileData = JSON.parse(cleanedProfile);
+    console.log("Extracted Profile Data:", profileData);
+      const userProfileData = await UserProfile.findOneAndUpdate(
+      { userId: req.user.userId },
+      {
+        name: profileData.name,
+        skills: profileData.skills,
+        experience: profileData.experience,
+        education: profileData.education,
+        projects: profileData.projects,
+        resumeText: textContent,
+        updatedAt: new Date()
+      },
+      { upsert: true, new: true }
+    );
+
+    // Save the profile data to the database
+      await userProfileData.save();
+
+      const details  =  res.json({
       resumeText: textContent,
       candidateProfile: JSON.parse(cleanedProfile),
       message: "Resume analyzed successfully"
