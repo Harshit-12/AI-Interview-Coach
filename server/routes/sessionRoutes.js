@@ -50,6 +50,36 @@ router.post("/create", protect, async (req, res) => {
   }
 });
 
+
+
+router.get("/latest", protect, async (req, res) => {
+  try {
+
+    console.log("inside lates swession");
+
+    const session = await InterviewSession.findOne({
+      userId: req.user.userId
+    }).sort({ createdAt: -1 });
+    console.log("user id from latest " + req.user.userId);
+
+    if (!session) {
+      return res.json({
+        hasSession: false
+      });
+    }
+    console.log("session data " + JSON.stringify(session));
+    // return res.json({
+    //   hasSession: true,
+    //   // sessionId: session._id
+    // });
+    
+     return res.json(session);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Failed to fetch session" });
+  }
+});
+
   router.get("/check-profile", protect, async (req, res) => {
   try {
     const session = await InterviewSession.findOne({
@@ -93,6 +123,14 @@ router.get("/:sessionId", async(req,res) =>{
   }
 })
 
+// fetch lates session for a user
+// router.get("/latest", protect, async (req, res) => {
+//   const session = await InterviewSession.findOne({
+//     userId: req.user.userId
+//   }).sort({ createdAt: -1 });
+
+//   return res.json({ sessionId: session._id });
+// });
 
 
 router.post("/add-response", protect, async (req, res) => {

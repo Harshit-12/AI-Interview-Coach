@@ -151,28 +151,60 @@ const handleEvaluation = async (userAnswer, profile) => {
 
 }
   return (
-    <div>
-      <h2>AI Interview</h2>
+   
+    <div className="bg-gray-100 min-h-screen flex flex-col items-center p-6">
 
-      <div style={{ border: "1px solid gray", padding: "10px", height: "300px", overflowY: "scroll" }}>
-        {messages.map((msg, i) => (
-          <div key={i} style={{ textAlign: msg.sender === "ai" ? "left" : "right" }}>
-            <p><b>{msg.sender === "ai" ? "AI" : "You"}:</b> {msg.text}</p>
-          </div>
-        ))}
-      </div>
+  <div className="w-full max-w-2xl bg-white rounded-xl shadow-lg p-4">
 
+    <h2 className="text-xl font-bold mb-4 text-center">
+      AI Interview
+    </h2>
+
+    {/* Chat Box */}
+    <div className="h-80 overflow-y-auto space-y-3 mb-4">
+
+      {messages.map((msg, i) => (
+        <div
+          key={i}
+          className={`p-3 rounded-lg max-w-xs ${
+            msg.sender === "ai"
+              ? "bg-gray-200 text-left"
+              : "bg-blue-500 text-white ml-auto"
+          }`}
+        >
+          {msg.text}
+        </div>
+      ))}
+
+    </div>
+
+    {/* Input */}
+    <div className="flex gap-2">
       <input
+        className="flex-1 border p-2 rounded-lg"
         value={input}
         onChange={(e) => setInput(e.target.value)}
-        placeholder="Type your answer..."
       />
 
-      <button onClick={handleSend}>Send</button>
-      <button onClick={handleEndInterview} style={{ marginLeft: "50px", marginTop: "20px" }}>
-        End Interview
+      <button
+        onClick={handleSend}
+        className="bg-blue-600 text-white px-4 rounded-lg"
+      >
+        Send
       </button>
     </div>
+
+    {/* End Button */}
+    <button
+      onClick={handleEndInterview}
+      className="mt-4 w-full bg-red-500 text-white py-2 rounded-lg"
+    >
+      End Interview
+    </button>
+
+  </div>
+</div>
+
   );
 }
 

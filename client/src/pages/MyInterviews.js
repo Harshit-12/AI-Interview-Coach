@@ -35,11 +35,9 @@ function MyInterviews() {
       
   return (
     <div>
-      <h2>Your Interview History</h2>
+      <h2 className="text-2xl font-bold text-gray-800 mb-2 text-center p-4">Your Interview History</h2>
 
-      <button onClick={() => navigate("/upload")}>
-        + Start New Interview
-      </button>
+  
 
       <div style={{ display: "flex", flexWrap: "wrap", gap: "20px", marginTop: "20px" }}>
         
@@ -49,9 +47,13 @@ function MyInterviews() {
               key={session._id}
               onClick={() => handleViewSession(session._id)}
               style={{
-                border: "1px solid gray",
+                bgColor: "blue-50 hover:bg-blue-100",
+                border: "0px solid gray",
                 padding: "15px",
-                width: "250px",
+                marginLeft: "20px",
+                boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+                hover: "bg-blue-100 color: blue-700",
+                width: "450px",
                 cursor: "pointer",
                 borderRadius: "10px"
               }}
@@ -67,6 +69,7 @@ function MyInterviews() {
 
               {/*Show avg score if available*/}
               {/* <p><b>Avg Score:</b> {avgScore.toFixed(1)}</p> */}
+              
             </div>
           ))
         ) : (

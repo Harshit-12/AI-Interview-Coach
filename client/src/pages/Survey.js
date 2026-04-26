@@ -1,93 +1,138 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import API from "../services/api";
 
 function Survey() {
   const navigate = useNavigate();
 
-  const [form, setForm] = useState({
+  const [formData, setFormData] = useState({
     role: "",
-    companies: "",
     experience: "",
-    interviewType: "",
+    techStack: "",
     difficulty: "",
-    strengths: "",
-    weaknesses: ""
   });
 
   const handleChange = (e) => {
-    setForm({
-      ...form,
-      [e.target.name]: e.target.value
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
     });
   };
 
-  const handleSubmit = async () => {
-    try {
-      const profile = JSON.parse(localStorage.getItem("profile"));
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
-      if (!profile) {
-        alert("No profile found. Please upload resume first.");
-        return;
-      }
+    localStorage.setItem("survey", JSON.stringify(formData));
 
-      // convert to required format
-      const survey = [
-        { question: "Target Role", answer: form.role },
-        { question: "Target Companies", answer: form.companies },
-        { question: "Experience", answer: form.experience },
-        { question: "Interview Type", answer: form.interviewType },
-        { question: "Difficulty", answer: form.difficulty },
-        { question: "Strengths", answer: form.strengths },
-        { question: "Weaknesses", answer: form.weaknesses }
-      ];
-      console.log(survey);
-      //  create session in DB
-      const res = await API.post("/session/create", {
-        profile,
-        survey
-      });
-
-      const sessionId = res.data.sessionId;
-      console.log("my survey " + survey);
-      // store sessionId for interview
-      localStorage.setItem("sessionId", sessionId);
-      localStorage.setItem("survey", JSON.stringify(survey));
-      // navigate to interview page
-      navigate("/interview");
-
-    } catch (error) {
-      console.error(error);
-      alert("Failed to create session");
-    }
+    navigate("/interview");
   };
 
   return (
-    <div>
-      <h2>Interview Setup</h2>
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-6">
 
-      <input name="role" placeholder="Target Role" onChange={handleChange} />
-      <input name="companies" placeholder="Target Companies" onChange={handleChange} />
-      <input name="experience" placeholder="Experience (e.g., 2 years)" onChange={handleChange} />
+      <div className="bg-white shadow-lg rounded-2xl p-8 w-full max-w-2xl">
 
-      <select name="interviewType" onChange={handleChange}>
-        <option value="">Select Interview Type</option>
-        <option value="Technical">Technical</option>
-        <option value="HR">HR</option>
-        <option value="Mixed">Mixed</option>
-      </select>
+        {/* Heading */}
+        <h2 className="text-2xl font-bold text-gray-800 mb-2">
+          Customize Your Interview 🎯
+        </h2>
 
-      <select name="difficulty" onChange={handleChange}>
-        <option value="">Select Difficulty</option>
-        <option value="Easy">Easy</option>
-        <option value="Medium">Medium</option>
-        <option value="Hard">Hard</option>
-      </select>
+        <p className="text-gray-500 mb-6">
+          Help us tailor questions based on your goals
+        </p>
 
-      <input name="strengths" placeholder="Your strengths" onChange={handleChange} />
-      <input name="weaknesses" placeholder="Topics to improve" onChange={handleChange} />
+        <form onSubmit={handleSubmit} className="space-y-5">
 
-      <button onClick={handleSubmit}>Start Interview</button>
+          {/* Target Role */}
+          <div>
+            <label className="block text-gray-700 mb-1">
+              Target Role
+            </label>
+            <input
+              type="text"
+              name="role"
+              placeholder="e.g. Frontend Developer"
+              value={formData.role}
+              onChange={handleChange}
+              className="w-full border p-3 rounded-lg focus:ring-2 focus:ring-blue-500"
+              required
+            />
+          </div>
+
+          {/* Experience */}
+          <div>
+            <label className="block text-gray-700 mb-1">
+              Experience Level
+            </label>
+            <select
+              name="experience"
+              value={formData.experience}
+              onChange={handleChange}
+              className="w-full border p-3 rounded-lg focus:ring-2 focus:ring-blue-500"
+              required
+            >
+              <option value="">Select</option>
+              <option>Fresher</option>
+              <option>1-2 Years</option>
+              <option>3-5 Years</option>
+              <option>5+ Years</option>
+            </select>
+          </div>
+
+          {/* Tech Stack */}
+          <div>
+            <label className="block text-gray-700 mb-1">
+              Tech Stack
+            </label>
+            <input
+              type="text"
+              name="techStack"
+              placeholder="e.g. React, Node.js, MongoDB"
+              value={formData.techStack}
+              onChange={handleChange}
+              className="w-full border p-3 rounded-lg focus:ring-2 focus:ring-blue-500"
+              required
+            />
+          </div>
+
+          {/* Difficulty */}
+          <div>
+            <label className="block text-gray-700 mb-1">
+              Interview Difficulty
+            </label>
+            <div className="flex gap-4">
+
+              {["Easy", "Medium", "Hard"].map((level) => (
+                <button
+                  type="button"
+                  key={level}
+                  onClick={() =>
+                    setFormData({ ...formData, difficulty: level })
+                  }
+                  className={`px-4 py-2 rounded-lg border ${
+                    formData.difficulty === level
+                      ? "bg-blue-600 text-white"
+                      : "bg-white"
+                  }`}
+                >
+                  {level}
+                </button>
+              ))}
+
+            </div>
+          </div>
+
+          {/* Submit Button */}
+          <button
+            type="submit"
+            className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition"
+          >
+            Start Interview 🚀
+          </button>
+
+        </form>
+
+      </div>
+
     </div>
   );
 }

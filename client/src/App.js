@@ -9,13 +9,13 @@ import Interview from "./pages/interview";
 import Evaluation from "./pages/Evaluation";
 import MyInterviews from "./pages/MyInterviews";
 import Evaluate from "./pages/Evaluate";
-import Navbar from "./pages/Navbar";
+import Navbar from "./components/Navbar";
 function App() {
   const token = localStorage.getItem("token");
   return (
     <>
     <Router>
-     {token && <Navbar />} 
+     <Navbar/>
 
       <Routes>
         <Route path="/" element={<Login />} />
