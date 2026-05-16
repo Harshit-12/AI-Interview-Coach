@@ -62,11 +62,11 @@ router.get("/latest", protect, async (req, res) => {
     }).sort({ createdAt: -1 });
     console.log("user id from latest " + req.user.userId);
 
-    if (!session) {
-      return res.json({
-        hasSession: false
-      });
-    }
+    // if (!session) {
+    //   return res.json({
+    //     hasSession: false
+    //   });
+    // }
     console.log("session data " + JSON.stringify(session));
     // return res.json({
     //   hasSession: true,
@@ -137,6 +137,11 @@ router.post("/add-response", protect, async (req, res) => {
   try {
     const { sessionId, question, answer, evaluation } = req.body;
 
+    console.log("Session ID= ", sessionId);
+    console.log("Question= ", question);
+    console.log("Answer= ", answer);
+    console.log("Evaluation= ", evaluation);
+
     const updatedSession = await InterviewSession.findByIdAndUpdate(
       sessionId,
       {
@@ -148,17 +153,17 @@ router.post("/add-response", protect, async (req, res) => {
           }
         }
       },
-      { new: true }
+      { new: true  }
     );
 
-    res.json({
+    return res.status(200).json({
       message: "Response added to session ✅",
       session: updatedSession
     });
 
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Failed to update session" });
+    return res.status(500).json({ error: "Failed to update session" });
   }
 });
 

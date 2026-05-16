@@ -7,7 +7,7 @@ import user from "../models/user.js";
 const router = express.Router();
 
 console.log("Profile routes loaded");
-
+ 
 router.get("/", protect, async (req, res) => {
   try {
     console.log("inside profile");

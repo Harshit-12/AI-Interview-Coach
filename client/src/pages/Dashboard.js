@@ -10,26 +10,29 @@ function Dashboard() {
     fetchSessions();
   }, []);
 
-  const fetchSessions = async (req, res) => {
-    const result = await API.get("/session/all");
-    // const profile = await UserProfile.findOne({
-    // userId: req.user.userId
-    // });
-    // console.log(result.data[0]);
-    // setUserName(result.data[0].profile.name);
+  const fetchSessions = async () => {
+    try {
+      const res = await API.get("/profile/");
+      const profile = res.data.profile;
+      setUserName(profile?.name || "");
+    } catch (error) {
+      console.error(error);
+    }
   };
     const handleStartInterview = async () => {
   try {
     // const res = await API.get("/session/check-profile");
-
+    
     const res = await API.get("/profile/");
+
+    console.log("Profile check response: ", res.data);
 
     const profile = res.data.profile;
 
     if (res.data.hasProfile) {
       // ✅ Use existing profile
       localStorage.setItem("profile", JSON.stringify(profile));
-      localStorage.setItem("sessionId", res.data.sessionId);
+      localStorage.setItem("sessionId", res.data.profile.userId);
       console.log("Session  id : " + res.data.sessionId);
       navigate("/survey"); // or directly /interview if you want
     } else {

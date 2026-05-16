@@ -1,67 +1,85 @@
 import { useState } from "react";
-import API from "../services/api";
 import { useNavigate } from "react-router-dom";
+import API from "../services/api";
+
 function UploadResume() {
   const [file, setFile] = useState(null);
-  const [profile, setProfile] = useState(null);
-   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+
+  const navigate = useNavigate();
+
   const handleUpload = async () => {
-    if (!file) {
-      alert("Please select a file");
-      return;
-    }
+    if (!file) return alert("Please select a file");
 
     const formData = new FormData();
     formData.append("resume", file);
 
     try {
-      const res = await API.post("/resume/upload-resume", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data"
-        }
-      });
+      setLoading(true);
 
-      console.log(res.data);
-
-      setProfile(res.data.candidateProfile);
-
-      // store profile for next steps
-      localStorage.setItem(
-        "profile",
-        JSON.stringify(res.data.candidateProfile)
-      );
-
-      // const userData = await API.post("user/user-Profile");
-      
-
+        const res = await API.post("/resume/upload-resume", formData);
+        localStorage.setItem("sessionId", res.data.candidateProfile.userId);
+        console.log("Session  id from resume upload: " + res.data.candidateProfile.userId);
+      setLoading(false);
       navigate("/survey");
 
     } catch (error) {
-      console.error(error);
+      setLoading(false);
       alert("Upload failed");
     }
   };
 
   return (
-    <div>
-      <h2>Upload Resume</h2>
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-6">
 
-      <input
-        type="file"
-        accept=".pdf"
-        onChange={(e) => setFile(e.target.files[0])}
-      />
+      <div className="bg-white shadow-lg rounded-2xl p-8 w-full max-w-xl text-center">
 
-      <button onClick={handleUpload}>Upload</button>
+        {/* Title */}
+        <h2 className="text-2xl font-bold text-gray-800 mb-2">
+          Upload Your Resume 📄
+        </h2>
 
-     { /* Show Extracted Profile */}
-      {profile && (
-        <div>
-          <h3>Extracted Profile</h3>
-          <pre>{JSON.stringify(profile, null, 2)}</pre>
-        </div>
-      )}
+        <p className="text-gray-500 mb-6">
+          We’ll analyze your resume to personalize your interview
+        </p>
 
+        {/* Upload Box */}
+        <label className="border-2 border-dashed border-gray-300 rounded-xl p-8 flex flex-col items-center justify-center cursor-pointer hover:border-blue-500 transition">
+
+          <input
+            type="file"
+            className="hidden"
+            accept=".pdf"
+            onChange={(e) => setFile(e.target.files[0])}
+          />
+
+          <p className="text-gray-600">
+            Click to upload or drag & drop
+          </p>
+
+          <p className="text-sm text-gray-400 mt-2">
+            PDF only
+          </p>
+
+        </label>
+
+        {/* File Name */}
+        {file && (
+          <p className="mt-4 text-green-600 text-sm">
+            Selected: {file.name}
+          </p>
+        )}
+
+        {/* Upload Button */}
+        <button
+          onClick={handleUpload}
+          disabled={loading}
+          className="mt-6 w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition disabled:opacity-50"
+        >
+          {loading ? "Processing Resume..." : "Upload & Continue 🚀"}
+        </button>
+
+      </div>
 
     </div>
   );

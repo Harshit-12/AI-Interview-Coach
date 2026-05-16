@@ -87,7 +87,9 @@ import API from "../services/api";
       Interview Report 📊
     </h2>
 
-    {session.interviewHistory.map((item, i) => (
+    { 
+    
+    session.interviewHistory.map((item, i) => (
       <div key={i} className="bg-white p-6 rounded-xl shadow mb-4">
 
       <h3 className="font-semibold text-lg">
@@ -122,8 +124,9 @@ import API from "../services/api";
       </div>
     ))}
 
-  </div>
+  </div>  
   );
 }
+
 
 export default Evaluate;

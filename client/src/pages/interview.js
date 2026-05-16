@@ -11,6 +11,7 @@ function Interview() {
   const survey = JSON.parse(localStorage.getItem("survey"));
   const sessionId = localStorage.getItem("sessionId");
   const [profile, setProfile] = useState(null);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   useEffect(() => {
     const initializeInterview = async () => {
@@ -37,10 +38,7 @@ function Interview() {
 
 
 
-// finish interview 
-const handleEndInterview = async()=>{
-   navigate("/evaluate"); 
-}
+
 
 // Fetch User Profile 
 
@@ -61,6 +59,7 @@ const fetchProfile = async () => {
   }
 };
 
+var responseSaved = false;
 
 // submit response
 const handleSend = async () => {
@@ -70,6 +69,9 @@ const handleSend = async () => {
   setcurrentAnswer(userAnswer);
   // show user message immediately
   setMessages((prev) => [...prev, { sender: "user", text: userAnswer }]);
+  // clear input
+    setInput("");
+  setLoading(true);
 
   try {
     console.log("Inside the handleSend");
@@ -119,12 +121,14 @@ const handleSend = async () => {
     //  Update current question
     setCurrentQuestion(nextQuestion);
 
-    // clear input
-    setInput("");
+    
     setcurrentAnswer(currentAnswer);
+    setLoading(false);
   } catch (error) {
     console.error("Error:", error);
+    setLoading(false);
   }
+
 };
 
 
@@ -139,22 +143,37 @@ const handleEvaluation = async (userAnswer, profile) => {
 
     console.log("current Answers before add response " + userAnswer);
     // Save to DB
-     await API.post("/session/add-response", {
+    const response = await API.post("/session/add-response", {
       sessionId,
       question: currentQuestion,   // FIXED
       answer: userAnswer,
       evaluation: evalRes.data.evaluation
     });
+
+    if (response.status === 200) {
+      responseSaved = true;
+    }
     } catch (error) {
       console.error("Evaluation Error:", error);
     }
 
 }
+
+// finish interview 
+const handleEndInterview = async()=>{
+    // save interview session data
+
+
+
+    // navigate to evaluation page
+   navigate("/evaluate"); 
+  
+}
   return (
    
     <div className="bg-gray-100 min-h-screen flex flex-col items-center p-6">
 
-  <div className="w-full max-w-2xl bg-white rounded-xl shadow-lg p-4">
+  <div className="w-full max-w-4xl bg-white rounded-xl shadow-lg p-4">
 
     <h2 className="text-xl font-bold mb-4 text-center">
       AI Interview
@@ -166,7 +185,7 @@ const handleEvaluation = async (userAnswer, profile) => {
       {messages.map((msg, i) => (
         <div
           key={i}
-          className={`p-3 rounded-lg max-w-xs ${
+          className={`p-3 rounded-lg max-w-sm ${
             msg.sender === "ai"
               ? "bg-gray-200 text-left"
               : "bg-blue-500 text-white ml-auto"
@@ -180,24 +199,37 @@ const handleEvaluation = async (userAnswer, profile) => {
 
     {/* Input */}
     <div className="flex gap-2">
-      <input
-        className="flex-1 border p-2 rounded-lg"
-        value={input}
-        onChange={(e) => setInput(e.target.value)}
-      />
-
-      <button
-        onClick={handleSend}
-        className="bg-blue-600 text-white px-4 rounded-lg"
-      >
-        Send
-      </button>
+ 
     </div>
+      <div className="flex items-end gap-2 bg-white p-3 rounded-xl shadow-md">
 
+  <textarea
+   value={input}
+     placeholder="Type your answer here..."
+  onChange={(e) => {
+    setInput(e.target.value);
+
+    e.target.style.height = "auto";
+    e.target.style.height = e.target.scrollHeight + "px";
+  }}
+  rows={1}
+  // className="flex-1 border p-2 rounded-lg resize-none overflow-y-auto max-h-40"
+  className="flex-1 border px-4 py-2 rounded-2xl resize-none overflow-y-auto max-h-32 bg-gray-50 focus:ring-2 focus:ring-black-300"
+   />
+
+  <button
+    onClick={handleSend}
+     disabled={loading} 
+    className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+  >
+    Send
+  </button>
+
+</div>
     {/* End Button */}
     <button
       onClick={handleEndInterview}
-      className="mt-4 w-full bg-red-500 text-white py-2 rounded-lg"
+      className="mt-4 min-w-full bg-red-500 text-white py-2 rounded-lg"
     >
       End Interview
     </button>

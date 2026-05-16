@@ -25,12 +25,6 @@ function Navbar() {
           My Interviews
         </Link>
 
-        <button
-          onClick={() => navigate("/interview")}
-          className="bg-blue-600 px-4 py-2 rounded-lg hover:bg-blue-700"
-        >
-          Start Interview
-        </button>
 
         <button
           onClick={handleLogout}

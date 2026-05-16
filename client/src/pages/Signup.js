@@ -18,7 +18,7 @@ function Signup() {
       alert("Signup successful");
       navigate("/");
     } catch (error) {
-      alert("Signup failed");
+        alert(error.response.data.error || "Registration failed");  
     }
   };
 

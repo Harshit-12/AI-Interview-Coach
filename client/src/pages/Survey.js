@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import API from "../services/api";
+
 
 function Survey() {
   const navigate = useNavigate();
@@ -18,10 +20,18 @@ function Survey() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     localStorage.setItem("survey", JSON.stringify(formData));
+
+    console.log("Survey Data: ", formData);
+    const profile = JSON.parse(localStorage.getItem("profile"));
+    const session = await API.post("/session/create", profile, formData);
+  
+  const sesssionId = session.data.sessionId;
+  localStorage.setItem("sessionId", sesssionId);
+  console.log("Session ID after survey submit: " + JSON.stringify(session.data.sessionId)); 
 
     navigate("/interview");
   };

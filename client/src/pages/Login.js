@@ -13,12 +13,16 @@ function Login() {
 
     try {
       const res = await API.post("/auth/login", { email, password });
+      const authToken=res?.data?.token;
 
-      localStorage.setItem("token", res.data.token);
-
+      localStorage.setItem("token", authToken);
+      if (res.data.status === 400){
+        alert(res.data.error);
+      }
       navigate("/dashboard");
     } catch (error) {
-      alert("Login failed");
+      console.error(error.response.data.error);
+      alert(error.response.data.error || "Login failed");  
     }
   };
 
