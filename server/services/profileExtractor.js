@@ -17,11 +17,39 @@ You are an expert technical recruiter AI.
 
 From the following resume text, extract a structured JSON profile with:
 - name
+- email
 - skills (array)
-- experience summary
-- projects (array)
-- target_roles (array)
-- strengths (array)
+-   experience: [
+  {
+    role: String,
+    company: String,
+    description: String,
+    startDate: String,
+    endDate: String
+  }
+  ]
+-   education: [
+    
+    {
+    degree: String,
+    institution: String,
+    startDate: String,
+    endDate: String
+    }
+  ]
+- projects: [
+
+    {
+    title: String,
+    description: String,
+    technologies: [String],
+    liveUrl: String,
+    startDate: String,
+    endDate: String
+    }
+]
+
+
 
 Return only valid JSON.
 

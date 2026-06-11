@@ -10,6 +10,8 @@ import Evaluation from "./pages/Evaluation";
 import MyInterviews from "./pages/MyInterviews";
 import Evaluate from "./pages/Evaluate";
 import Navbar from "./components/Navbar";
+import Profile from "./pages/Profile";
+import ProfileView from "./pages/ProfileView";  
 function App() {
   const token = localStorage.getItem("token");
   return (
@@ -55,6 +57,23 @@ function App() {
             <MyInterviews />
           </ProtectedRoute>
         } />
+
+        <Route
+         path="/profile"
+          element={
+        <ProtectedRoute>
+          <ProfileView />
+        </ProtectedRoute>
+  }
+/>
+        <Route
+         path="/profile/edit"
+          element={
+        <ProtectedRoute>
+          <Profile />
+        </ProtectedRoute>
+        }
+/>
       </Routes>
     </Router>
     </>

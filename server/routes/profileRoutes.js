@@ -35,4 +35,56 @@ router.get("/", protect, async (req, res) => {
   }
 });
 
+router.put(
+  "/update",
+  protect,
+  async (req, res) => {
+
+    const updatedProfile =
+      await UserProfile.findOneAndUpdate(
+        { userId: req.user.userId },
+        req.body,
+        { new: true }
+      );
+
+    res.json(updatedProfile);
+  }
+);
+
+
+router.put("/update", protect, async (req, res) => {
+  try {
+
+    console.log("expereice data+++ ", JSON.stringify(req.body));
+    const updatedProfile = await UserProfile.findOneAndUpdate(
+      { userId: req.user.userId },
+
+      {
+        $set: {
+          name: req.body.name,
+          email: req.body.email,
+          skills: req.body.skills,
+          experience: req.body.experience,
+          education: req.body.education,
+          projects: req.body.projects
+        }
+      },
+
+      { new: true }
+    );
+
+    res.json({
+      message: "Profile updated successfully",
+      profile: updatedProfile
+    });
+
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      error: "Failed to update profile"
+    });
+  }
+});
+
 export default router;

@@ -24,7 +24,9 @@ function Navbar() {
         <Link to="/my-interviews" className="hover:text-blue-400">
           My Interviews
         </Link>
-
+        <Link to="/profile" className="hover:text-blue-400">
+          Profile
+        </Link>
 
         <button
           onClick={handleLogout}

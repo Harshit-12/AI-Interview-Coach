@@ -18,6 +18,7 @@ function UploadResume() {
       setLoading(true);
 
         const res = await API.post("/resume/upload-resume", formData);
+        console.log("Resume upload response: ", res.data);
         localStorage.setItem("sessionId", res.data.candidateProfile.userId);
         console.log("Session  id from resume upload: " + res.data.candidateProfile.userId);
       setLoading(false);

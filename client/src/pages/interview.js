@@ -11,7 +11,9 @@ function Interview() {
   const survey = JSON.parse(localStorage.getItem("survey"));
   const sessionId = localStorage.getItem("sessionId");
   const [profile, setProfile] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState();
+  const [username, setuserName] = useState("");
+  const [isListening, setIsListening] = useState(false);
   const navigate = useNavigate();
   useEffect(() => {
     const initializeInterview = async () => {
@@ -24,10 +26,44 @@ function Interview() {
 
 
 
+  useEffect(() => {
+  if (currentQuestion) {
+    speakQuestion(currentQuestion);
+  }
+}, [currentQuestion]);
+
+// const speakQuestion = (text) => {
+//   speechSynthesis.cancel();
+
+//   const utterance = new SpeechSynthesisUtterance(text);
+
+//   utterance.lang = "en-IN";
+//   utterance.rate = 0.9;
+//   utterance.pitch = 1;
+//   const voices = speechSynthesis.getVoices();
+
+//   utterance.voice = voices[0];
+
+//   speechSynthesis.speak(utterance);
+// };
+
+const speakQuestion = (text) => {
+  speechSynthesis.cancel();
+
+  const utterance = new SpeechSynthesisUtterance(text);
+
+  const voices = speechSynthesis.getVoices();
+  console.log(voices);
+  utterance.lang = "en-IN";
+  utterance.rate = 0.9;
+  utterance.pitch = 1.2;
+
+  speechSynthesis.speak(utterance);
+};
 
   //  Start Interview
   const startInterview = () => {
-    const greeting = "Hi! Let's start the interview.\nCould you please tell me about yourself.";
+    const greeting =  `Hi ${username}! Let's start the interview.\nCould you please tell me about yourself.`;
 
     setMessages([
       { sender: "ai", text: greeting }
@@ -48,6 +84,8 @@ const fetchProfile = async () => {
 
     const profile = res.data.profile;
     setProfile(profile);
+  
+    setuserName(profile.name);
     // optional: store temporarily
     localStorage.setItem("profile", JSON.stringify(profile));
 
@@ -60,6 +98,9 @@ const fetchProfile = async () => {
 };
 
 var responseSaved = false;
+
+
+
 
 // submit response
 const handleSend = async () => {
@@ -123,14 +164,59 @@ const handleSend = async () => {
 
     
     setcurrentAnswer(currentAnswer);
-    setLoading(false);
+    
   } catch (error) {
     console.error("Error:", error);
+    
+  }
+  finally
+  {    
     setLoading(false);
   }
 
 };
 
+
+
+const handleMicClick = () => {
+   const SpeechRecognition =
+  window.SpeechRecognition || window.webkitSpeechRecognition;
+
+  const recognition = new SpeechRecognition();
+
+  recognition.continuous = false;
+  recognition.interimResults = true;
+  recognition.lang = "en-US";
+
+  if (!SpeechRecognition) {
+    alert("Speech Recognition not supported in this browser");
+    return;
+  }
+
+  setIsListening(true);
+  recognition.start();
+
+  recognition.onresult = (event) => {
+    var transcript = event.results[0][0].transcript;
+    console.log("Transcript: ", transcript);
+    console.log("Current Input before update: ", input);
+    // setInput((prev) => prev + " " + transcript); // append text
+    // transcript="";
+ 
+    setInput(input + " " + transcript); // replace text
+    setIsListening(false);
+    transcript="";
+  };
+
+  recognition.onerror = (err) => {
+    console.error(err);
+    setIsListening(false);
+  };
+
+  recognition.onend = () => {
+    setIsListening(false);
+  };
+};
 
 // Evaluate answer and save to DB
 const handleEvaluation = async (userAnswer, profile) => {
@@ -192,6 +278,12 @@ const handleEndInterview = async()=>{
           }`}
         >
           {msg.text}
+          <button
+        onClick={() => speakQuestion(currentQuestion)}
+        className="bg-white-200 px-3 py-2 rounded-lg"
+        >
+        🔊
+        </button>
         </div>
       ))}
 
@@ -205,7 +297,8 @@ const handleEndInterview = async()=>{
 
   <textarea
    value={input}
-     placeholder="Type your answer here..."
+     placeholder={loading ? "AI is thinking, please wait..." : "Type your answer here..."}
+     disabled={loading} 
   onChange={(e) => {
     setInput(e.target.value);
 
@@ -217,10 +310,21 @@ const handleEndInterview = async()=>{
   className="flex-1 border px-4 py-2 rounded-2xl resize-none overflow-y-auto max-h-32 bg-gray-50 focus:ring-2 focus:ring-black-300"
    />
 
+  {/* 🎤 Mic Button */}
+  <button
+    onClick={handleMicClick}
+    disabled={loading}
+    className={`px-3 py-2 rounded-full ${
+      isListening ? "bg-green-400" : "bg-gray-200"
+    }`}
+  >
+    🎤
+  </button>
   <button
     onClick={handleSend}
-     disabled={loading} 
+     
     className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+    disabled={loading} 
   >
     Send
   </button>

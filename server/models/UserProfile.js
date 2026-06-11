@@ -12,14 +12,36 @@ const userProfileSchema = new mongoose.Schema({
   email: String,
 
   skills: [String],
-  experience: String,
-  education: String,
-  projects: [String],
+  experience: [
+  {
+    role: String,
+    company: String,
+    description: String,
+    startDate: String,
+    endDate: String
+  }
+  ],
+  education: [
+    
+    {
+    degree: String,
+    institution: String,
+    startDate: String,
+    endDate: String
+    }
+  ],
+  projects: [
+  {
+    title: String,
+    description: String,
+    technologies: [String],
+    liveUrl: String,
+    startDate: String,
+    endDate: String
+  }
+],
 
   resumeText: String, // parsed PDF content
-
-  targetRole: String,
-  preferredDomains: [String],
 
   createdAt: {
     type: Date,
