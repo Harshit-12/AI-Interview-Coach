@@ -35,21 +35,21 @@ router.get("/", protect, async (req, res) => {
   }
 });
 
-router.put(
-  "/update",
-  protect,
-  async (req, res) => {
+// router.put(
+//   "/update",
+//   protect,
+//   async (req, res) => {
 
-    const updatedProfile =
-      await UserProfile.findOneAndUpdate(
-        { userId: req.user.userId },
-        req.body,
-        { new: true }
-      );
+//     const updatedProfile =
+//       await UserProfile.findOneAndUpdate(
+//         { userId: req.user.userId },
+//         req.body,
+//         { new: true }
+//       );
 
-    res.json(updatedProfile);
-  }
-);
+//     res.json(updatedProfile);
+//   }
+// );
 
 
 router.put("/update", protect, async (req, res) => {
@@ -70,7 +70,9 @@ router.put("/update", protect, async (req, res) => {
         }
       },
 
-      { new: true }
+      { new: true,
+        upsert: true
+       }
     );
 
     res.json({

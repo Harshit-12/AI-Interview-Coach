@@ -18,6 +18,10 @@ You are an expert technical recruiter AI.
 From the following resume text, extract a structured JSON profile with:
 - name
 - email
+- contactNumber
+- githubUrl
+- linkedinUrl
+- certifications (array)
 - skills (array)
 -   experience: [
   {

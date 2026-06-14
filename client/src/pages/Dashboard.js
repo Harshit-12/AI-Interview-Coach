@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import API from "../services/api";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 
 function Dashboard() {
   const [userName, setUserName] = useState([]);
@@ -86,7 +86,12 @@ function Dashboard() {
 
         <div className="bg-white p-6 rounded-xl shadow-md">
           <h3 className="text-lg font-semibold">Resume Profile</h3>
-          <p className="text-gray-500">Manage your profile</p>
+          <p className="text-gray-500">
+            <Link to="/profile" className="hover:text-blue-400">
+          Manage your profile
+        </Link>
+
+            </p>
         </div>
 
       </div>

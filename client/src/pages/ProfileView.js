@@ -85,9 +85,51 @@ function ProfileView() {
             <p>
               <strong>Email:</strong> {profile.email}
             </p>
+          
+         
+          {
+            profile.contactNumber && (
+              <p>
+                <strong>Contact Number:</strong>
+                {" "}
+                {profile.contactNumber}
+              </p>
+            )
+        }
 
-          </section>
+        {
+          profile.githubUrl && (
+              <p>
+                <strong>GitHub:</strong>
+                {" "}
+                <a
+                  href={profile.githubUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {profile.githubUrl}
+                </a>
+              </p>
+            )
+        }
 
+        {
+        profile.linkedinUrl && (
+              <p>
+                <strong>LinkedIn:</strong>
+                {" "}
+                <a
+                  href={profile.linkedinUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {profile.linkedinUrl}
+                </a>
+              </p>
+            )
+        }
+
+ </section>
           {/* Skills */}
 
           <section className="mb-8">
@@ -228,6 +270,36 @@ function ProfileView() {
             ))}
 
           </section>
+
+          {
+  profile.certifications?.length > 0 && (
+
+
+
+     <section className="mb-8">
+
+            <h2 className="text-xl font-bold mb-3">
+              Certifications
+            </h2>
+
+      {
+        profile.certifications.map(
+          (cert, index) => (
+
+           
+          <p className="mt-2 margin-left: 20px" key={index}>
+              <li className="ml-8" key={index}>
+              {cert}
+            </li>
+          </p>
+          )
+        )
+      }
+
+    </section>
+
+  )
+}
 
           {/* Edit Button */}
 

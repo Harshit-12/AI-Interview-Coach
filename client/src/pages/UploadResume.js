@@ -81,7 +81,20 @@ function UploadResume() {
         </button>
 
       </div>
+          <div className="flex items-center w-full max-w-md">
+    <hr className="flex-1" />
+    <span className="mx-3 text-gray-500">
+      OR
+    </span>
+    <hr className="flex-1" />
+  </div>
 
+  <button
+    onClick={() => navigate("/profile/edit")}
+    className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700"
+  >
+    Create Your Resume from Scratch ✍️
+  </button>
     </div>
   );
 }

@@ -79,224 +79,215 @@ router.post("/upload-resume", protect , upload.single("resume"), async (req, res
 });
 
 
-router.get("/generate", protect, async (req, res) => {
+ router.get("/generate", protect, async (req, res) => {
   try {
-
     const profile = await UserProfile.findOne({
       userId: req.user.userId
     });
 
-    const formatDate = (date) => {
-      if (!date) return "Present";
+  const formatDate = (date) => {
+    if (!date) return "Present";
 
-      return new Date(date).toLocaleDateString(
-        "en-US",
-        {
-          month: "short",
-          year: "numeric"
-        }
-      );
+    return new Date(date).toLocaleDateString(
+      "en-US",
+      {
+        month: "short",
+        year: "numeric"
+      }
+    );
   };
 
-    if (!profile) {
-      return res.status(404).json({
-        error: "Profile not found"
-      });
-    }
-
-    const doc = new PDFDocument({
-      margin: 50
-    });
-
-    res.setHeader(
-      "Content-Type",
-      "application/pdf"
-    );
-
-    res.setHeader(
-      "Content-Disposition",
-      "attachment; filename=resume.pdf"
-    );
-
-    doc.pipe(res);
-
-    // ==========================
-    // Header
-    // ==========================
-
-    doc
-      .fontSize(22)
-      .text(profile.name || "", {
-        align: "center"
-      });
-
-    doc.moveDown(0.5);
-
-    doc
-      .fontSize(10)
-      .text(profile.email || "", {
-        align: "center"
-      });
-
-    doc.moveDown();
-
-    // ==========================
-    // Skills
-    // ==========================
-
-    doc
-      .fontSize(16)
-      .text("SKILLS");
-
-    doc.moveTo(50, doc.y)
-      .lineTo(550, doc.y)
-      .stroke();
-
-    doc.moveDown(0.5);
-
-    doc.fontSize(11);
-
-    // profile.skills?.forEach(skill => {
-    //   doc.text(`• ${skill}`);
-    // });
-
-    doc
-  .fontSize(11)
-  .font("Helvetica")
-  .text(profile.skills?.join(" • "));
-
-    doc.moveDown();
-
-    // ==========================
-    // Experience
-    // ==========================
-
-    doc
-      .fontSize(16)
-      .text("EXPERIENCE");
-
-    doc.moveTo(50, doc.y)
-      .lineTo(550, doc.y)
-      .stroke();
-
-    doc.moveDown(0.5);
-
-    profile.experience?.forEach(exp => {
-
-      doc
-        .fontSize(12)
-        .font("Helvetica-Bold")
-        .text(exp.role || "");
-
-      doc
-        .font("Helvetica")
-        .fontSize(11)
-        .text(
-          `${exp.company || ""} |  ${
-            formatDate(exp.startDate) || ""
-          } - ${formatDate(exp.endDate) || ""
-          }`
-        );
-
-      doc.text(exp.description || "");
-
-      doc.moveDown();
-    });
-
-    // ==========================
-    // Projects
-    // ==========================
-
-    doc
-      .fontSize(16)
-      .text("PROJECTS");
-
-    doc.moveTo(50, doc.y)
-      .lineTo(550, doc.y)
-      .stroke();
-
-    doc.moveDown(0.5);
-
-    profile.projects?.forEach(project => {
-
-      // doc
-      //   .fontSize(12)
-      //   .font("Helvetica-Bold")
-      //   .text(`${project.title || ""} |  ${project.startDate || ""} - ${project.endDate || ""}`
-      //   );
-        
-      doc
-  .fontSize(12)
-  .font("Helvetica-Bold")
-  .text(project.title || "", {
-    continued: true
+  const doc = new PDFDocument({
+    margin: 50
   });
 
+  res.setHeader(
+       "Content-Type",
+       "application/pdf"
+     );
+
+     res.setHeader(
+       "Content-Disposition",
+       "attachment; filename=resume.pdf"
+     );
+
+     doc.pipe(res);
+const addSectionHeading = (title) => {
+
+  doc.moveDown(0.5);
+
+  doc
+    .font("Helvetica-Bold")
+    .fontSize(14)
+    .fillColor("black")
+    .text(title);
+
+  doc
+    .moveTo(50, doc.y)
+    .lineTo(550, doc.y)
+    .stroke();
+
+  doc.moveDown(0.3);
+};
+
 doc
-  .fontSize(10)
+  .font("Helvetica-Bold")
+  .fontSize(22)
+  .fillColor("black")
+  .text(profile.name || "", {
+    align: "center"
+  });
+
+let contactInfo = [];
+
+if (profile.email)
+  contactInfo.push(profile.email);
+
+if (profile.contactNumber)
+  contactInfo.push(profile.contactNumber);
+
+if (profile.linkedinUrl)
+  contactInfo.push(profile.linkedinUrl);
+
+if (profile.githubUrl)
+  contactInfo.push(profile.githubUrl);
+
+doc
   .font("Helvetica")
-  .text(
-    ` | ${formatDate(project.startDate)} - ${formatDate(project.endDate)}`
-  );
-      doc
-        .font("Helvetica")
-        .fontSize(11)
-        .text(project.description || "");
+  .fontSize(10)
+  .fillColor("blue")
+  .text(contactInfo.join(" | "), {
+    align: "center"
+  });
 
-      if (
-        project.technologies &&
-        project.technologies.length
-      ) {
-        doc.text(
-          `Technologies: ${project.technologies.join(", ")}`
-        );
-      }
+doc.fillColor("black");
 
-      doc.moveDown();
-    });
+doc.moveDown();
 
-    // ==========================
-    // Education
-    // ==========================
+addSectionHeading("SKILLS");
+
+doc
+  .font("Helvetica")
+  .fontSize(11)
+  .text(profile.skills?.join(" | ") || "");
+
+  if (profile.experience?.length) {
+
+  addSectionHeading("EXPERIENCE");
+
+  profile.experience.forEach((exp) => {
 
     doc
-      .fontSize(16)
-      .text("EDUCATION");
+      .font("Helvetica-Bold")
+      .fontSize(12)
+      .text(exp.role || "", {
+        continued: true
+      });
 
-    doc.moveTo(50, doc.y)
-      .lineTo(550, doc.y)
-      .stroke();
+    doc
+      .font("Helvetica")
+      .fontSize(10)
+      .text(
+        ` | ${exp.company || ""} | ${formatDate(exp.startDate)} - ${formatDate(exp.endDate)}`
+      );
+
+    if (exp.description) {
+      doc
+        .fontSize(11)
+        .font("Helvetica")
+        .text(exp.description);
+    }
 
     doc.moveDown(0.5);
+  });
+}
 
-    profile.education?.forEach(edu => {
+if (profile.projects?.length) {
 
-      doc
-        .fontSize(12)
-        .font("Helvetica-Bold")
-        .text(edu.degree || "");
+  addSectionHeading("PROJECTS");
 
+  profile.projects.forEach((project) => {
+
+    doc
+      .font("Helvetica-Bold")
+      .fontSize(12)
+      .text(project.title || "", {
+        continued: true
+      });
+
+    doc
+      .font("Helvetica")
+      .fontSize(10)
+      .text(
+        ` | ${formatDate(project.startDate)} - ${formatDate(project.endDate)}`
+      );
+
+    if (project.description) {
       doc
         .font("Helvetica")
         .fontSize(11)
+        .text(project.description);
+    }
+
+    if (project.technologies?.length) {
+
+      doc
+        .font("Helvetica-Oblique")
+        .fontSize(10)
         .text(
-          `${edu.institution || ""} |   ${formatDate(edu.startDate) || ""} - ${
-          formatDate(edu.endDate) || ""
-        }`
+          `Technologies: ${project.technologies.join(", ")}`
         );
+    }
 
-      // doc.text(
-      //   `${edu.startDate || ""} - ${
-      //     edu.endDate || ""
-      //   }`
-      // );
+    doc.moveDown(0.5);
+  });
+}
 
-      doc.moveDown();
-    });
 
-    doc.end();
+if (profile.education?.length) {
 
-  } catch (error) {
+  addSectionHeading("EDUCATION");
+
+  profile.education.forEach((edu) => {
+
+    doc
+      .font("Helvetica-Bold")
+      .fontSize(12)
+      .text(edu.degree || "", {
+        continued: true
+      });
+
+    doc
+      .font("Helvetica")
+      .fontSize(10)
+      .text(
+        ` | ${formatDate(edu.startDate)} - ${formatDate(edu.endDate)}`
+      );
+
+    doc
+      .font("Helvetica")
+      .fontSize(11)
+      .text(edu.institution || "");
+
+    doc.moveDown(0.5);
+  });
+}
+
+if (profile.certifications?.length) {
+
+  addSectionHeading("CERTIFICATIONS");
+
+  doc
+    .font("Helvetica")
+    .fontSize(11)
+    .text(
+      profile.certifications.join(" | ")
+    );
+}
+
+  doc.end();
+  }
+  catch (error) {
 
     console.error(error);
 
@@ -305,6 +296,318 @@ doc
     });
   }
 });
+
+
+// router.get("/generate", protect, async (req, res) => {
+//   try {
+
+//     const profile = await UserProfile.findOne({
+//       userId: req.user.userId
+//     });
+
+//     const formatDate = (date) => {
+//       if (!date) return "Present";
+
+//       return new Date(date).toLocaleDateString(
+//         "en-US",
+//         {
+//           month: "short",
+//           year: "numeric"
+//         }
+//       );
+//   };
+
+//     if (!profile) {
+//       return res.status(404).json({
+//         error: "Profile not found"
+//       });
+//     }
+
+//     const doc = new PDFDocument({
+//       margin: 50
+//     });
+
+//     res.setHeader(
+//       "Content-Type",
+//       "application/pdf"
+//     );
+
+//     res.setHeader(
+//       "Content-Disposition",
+//       "attachment; filename=resume.pdf"
+//     );
+
+//     doc.pipe(res);
+
+//     // ==========================
+//     // Header
+//     // ==========================
+
+//     doc
+//   .fontSize(16).font("Helvetica-Bold")
+//   .text(profile.name || "", {
+//     align: "left"
+    
+//   });
+
+ 
+
+//   doc.moveDown();
+
+//       doc
+//       .fontSize(16).font("Helvetica")
+//       .text("BASIC INFORMATION");
+
+//       doc.moveTo(50, doc.y)
+//       .lineTo(550, doc.y)
+//       .stroke();
+    
+//       doc.moveDown(0.5);
+
+  
+
+//       doc
+//         .fontSize(11)
+//         .font("Helvetica")
+//         .text(`• Email :  ${profile.email || ""}`);
+      
+    
+//       doc.moveDown(0.5);
+// if (profile.contactNumber) {
+//     doc
+//         .fontSize(11)
+//         .font("Helvetica")
+//         .text(`• Contact Number :  ${profile.contactNumber || ""}`);
+      
+    
+//       doc.moveDown(0.5);
+// }
+
+// if (profile.linkedinUrl) {
+//       doc
+//         .fontSize(11)
+//         .font("Helvetica")
+//         .text(`• LinkedIn URL : ${profile.linkedinUrl || ""}`);
+//          doc.moveDown(0.5);
+
+// }
+
+       
+
+//   if (profile.githubUrl) {
+
+//       doc
+//         .fontSize(11)
+//         .font("Helvetica")
+//         .text(`• GitHub URL : ${profile.githubUrl || ""}`)
+      
+        
+//       doc.moveDown(0.5);
+
+//   }
+    
+//       doc.moveDown(0.5);
+
+
+
+
+
+
+//     // ==========================
+//     // Skills
+//     // ==========================
+
+//     doc
+//       .fontSize(16)
+//       .text("SKILLS");
+
+//     doc.moveTo(50, doc.y)
+//       .lineTo(550, doc.y)
+//       .stroke();
+
+//     doc.moveDown(0.5);
+
+//     doc.fontSize(11);
+
+//     // profile.skills?.forEach(skill => {
+//     //   doc.text(`• ${skill}`);
+//     // });
+
+//     doc
+//   .fontSize(11)
+//   .font("Helvetica")
+//   .text(profile.skills?.join(" • "));
+
+//     doc.moveDown();
+
+//     // ==========================
+//     // Experience
+//     // ==========================
+
+//     doc
+//       .fontSize(16)
+//       .text("EXPERIENCE");
+
+//     doc.moveTo(50, doc.y)
+//       .lineTo(550, doc.y)
+//       .stroke();
+
+//     doc.moveDown(0.5);
+
+//     profile.experience?.forEach(exp => {
+
+//       doc
+//         .fontSize(12)
+//         .font("Helvetica-Bold")
+//         .text(exp.role || "");
+
+//       doc
+//         .font("Helvetica")
+//         .fontSize(11)
+//         .text(
+//           `${exp.company || ""} |  ${
+//             formatDate(exp.startDate) || ""
+//           } - ${formatDate(exp.endDate) || ""
+//           }`
+//         );
+
+//       doc.text(exp.description || "");
+
+//       doc.moveDown();
+//     });
+
+//     // ==========================
+//     // Projects
+//     // ==========================
+
+//     doc
+//       .fontSize(16)
+//       .text("PROJECTS");
+
+//     doc.moveTo(50, doc.y)
+//       .lineTo(550, doc.y)
+//       .stroke();
+
+//     doc.moveDown(0.5);
+
+//     profile.projects?.forEach(project => {
+
+//       // doc
+//       //   .fontSize(12)
+//       //   .font("Helvetica-Bold")
+//       //   .text(`${project.title || ""} |  ${project.startDate || ""} - ${project.endDate || ""}`
+//       //   );
+        
+//       doc
+//   .fontSize(12)
+//   .font("Helvetica-Bold")
+//   .text(project.title || "", {
+//     continued: true
+//   });
+
+// doc
+//   .fontSize(10)
+//   .font("Helvetica")
+//   .text(
+//     ` | ${formatDate(project.startDate)} - ${formatDate(project.endDate)}`
+//   );
+//       doc
+//         .font("Helvetica")
+//         .fontSize(11)
+//         .text(project.description || "");
+
+//       if (
+//         project.technologies &&
+//         project.technologies.length
+//       ) {
+//         doc.text(
+//           `Technologies: ${project.technologies.join(", ")}`
+//         );
+//       }
+
+//       doc.moveDown();
+//     });
+
+//     // ==========================
+//     // Education
+//     // ==========================
+
+//     doc
+//       .fontSize(16)
+//       .text("EDUCATION");
+
+//     doc.moveTo(50, doc.y)
+//       .lineTo(550, doc.y)
+//       .stroke();
+
+//     doc.moveDown(0.5);
+
+//     profile.education?.forEach(edu => {
+
+//       doc
+//         .fontSize(12)
+//         .font("Helvetica-Bold")
+//         .text(edu.degree || "");
+
+//       doc
+//         .font("Helvetica")
+//         .fontSize(11)
+//         .text(
+//           `${edu.institution || ""} |   ${formatDate(edu.startDate) || ""} - ${
+//           formatDate(edu.endDate) || ""
+//         }`
+//         );
+
+//       // doc.text(
+//       //   `${edu.startDate || ""} - ${
+//       //     edu.endDate || ""
+//       //   }`
+//       // );
+
+//       doc.moveDown();
+//     });
+
+
+//     if (
+//   profile.certifications &&
+//   profile.certifications.length > 0
+// ) {
+
+//   doc.moveDown();
+
+//   doc
+//       .fontSize(16)
+//       .text("CERTIFICATIONS");
+
+//       doc.moveTo(50, doc.y)
+//       .lineTo(550, doc.y)
+//       .stroke();
+    
+//       doc.moveDown(0.5);
+
+//   profile.certifications.forEach(
+//     (cert) => {
+
+//       doc
+//         .fontSize(11)
+//         .font("Helvetica")
+//         .text(`• ${cert}`);
+
+//     }
+//   );
+// }
+
+//     doc.end();
+
+//   } catch (error) {
+
+//     console.error(error);
+
+//     res.status(500).json({
+//       error: "Failed to generate resume"
+//     });
+//   }
+// });
 
 
 export default router;

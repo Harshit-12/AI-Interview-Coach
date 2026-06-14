@@ -1,3 +1,4 @@
+import { Certificate } from "crypto";
 import mongoose from "mongoose";
 
 const userProfileSchema = new mongoose.Schema({
@@ -40,7 +41,10 @@ const userProfileSchema = new mongoose.Schema({
     endDate: String
   }
 ],
-
+  contactNumber: String,
+  githubUrl: String,
+  linkedinUrl: String,
+  certifications: [String],
   resumeText: String, // parsed PDF content
 
   createdAt: {

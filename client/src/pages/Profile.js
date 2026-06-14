@@ -8,6 +8,10 @@ function Profile() {
     name: "",
     email: "",
     skills: "",
+    contactNumber: "",
+    githubUrl: "",
+    linkedinUrl: "",
+    certifications: [],
     experience: [],
     education: [],
     projects: []
@@ -155,13 +159,68 @@ const handleProjectChange = (
   });
 };
 
+const addCertification = () => {
+
+  setProfile({
+    ...profile,
+    certifications: [
+      ...profile.certifications,
+      ""
+    ]
+  });
+
+};
+const handleCertificationChange = (
+  index,
+  value
+) => {
+
+  const updated = [
+    ...profile.certifications
+  ];
+
+  updated[index] = value;
+
+  setProfile({
+    ...profile,
+    certifications: updated
+  });
+
+};
+
+const removeCertification = (index) => {
+
+  setProfile({
+    ...profile,
+    certifications:
+      profile.certifications.filter(
+        (_, i) => i !== index
+      )
+  });
+
+};
+
 
   const fetchProfile = async () => {
     try {
 
       const res = await API.get("/profile");
-
-      setProfile({
+      if (!res.data.hasProfile) {
+         setProfile({
+        name: "",
+        email: "",
+        skills: [],
+        experience: [],
+        education: [],
+        projects: [],
+        contactNumber: "",
+        githubUrl: "",
+        linkedinUrl: "",
+        certifications: []
+        });
+      }
+      else{
+        setProfile({
         name: res.data.profile.name || "",
         email: res.data.profile.email || "",
         skills: res.data.profile.skills?.join(", ") || "",
@@ -169,8 +228,15 @@ const handleProjectChange = (
         experience: res.data.profile.experience || "",
         education: res.data.profile.education || "",
         projects: res.data.profile.projects|| "",
+        contactNumber: res.data.profile.contactNumber || "",
+        githubUrl: res.data.profile.githubUrl || "",
+        linkedinUrl: res.data.profile.linkedinUrl || "",
+        certifications: res.data.profile.certifications || ""
       });
 
+
+      }
+      
     } catch (error) {
       console.error(error);
     }
@@ -202,7 +268,7 @@ const handleProjectChange = (
       );
 
       setLoading(false);
-
+      
       alert("Profile updated successfully");
       navigate("/profile");
     } catch (error) {
@@ -228,9 +294,9 @@ const handleProjectChange = (
 
           {/* Name */}
           <div>
-            <label className="block mb-1 font-medium">
-              Name
-            </label>
+            <h3 className="text-xl font-bold mb-4">
+           Name
+        </h3>
 
             <input
               type="text"
@@ -243,9 +309,9 @@ const handleProjectChange = (
 
           {/* Email */}
           <div>
-            <label className="block mb-1 font-medium">
-              Email
-            </label>
+            <h3 className="text-xl font-bold mb-4">
+           Email
+        </h3>
 
             <input
               type="email"
@@ -255,12 +321,54 @@ const handleProjectChange = (
               className="w-full border p-3 rounded-lg focus:ring-2 focus:ring-blue-500"
             />
           </div>
+          <h3 className="text-xl font-bold mb-4">
+           Contact Number
+        </h3>
+          <input
+            type="text"
+            placeholder="Contact Number"
+            value={profile.contactNumber || ""}
+            onChange={(e) =>
+              setProfile({
+                ...profile,
+                contactNumber: e.target.value
+              })
+          }
+        />
+        <h3 className="text-xl font-bold mb-4">
+           Github Url
+        </h3>
+        <input
+            type="text"
+            placeholder="GitHub URL"
+            value={profile.githubUrl || ""}
+            onChange={(e) =>
+              setProfile({
+                ...profile,
+                githubUrl: e.target.value
+              })
+            }
+        />
+      <h3 className="text-xl font-bold mb-4">
+           Linkedin Url
+        </h3>
 
+        <input
+            type="text"
+            placeholder="LinkedIn URL"
+            value={profile.linkedinUrl || ""}
+            onChange={(e) =>
+              setProfile({
+                ...profile,
+                linkedinUrl: e.target.value
+              })
+            }
+        />
           {/* Skills */}
           <div>
-            <label className="block mb-1 font-medium">
-              Skills
-            </label>
+            <h3 className="text-xl font-bold mb-4">
+           Skills
+        </h3>
 
             <textarea
               rows="3"
@@ -271,9 +379,48 @@ const handleProjectChange = (
             />
           </div>
 
-   <h2 className="text-xl font-bold mb-4">
+
+             
+             <h3 className="text-xl font-bold mb-4">
+           Certifications
+        </h3>
+
+{profile.certifications.map(
+  (cert, index) => (
+
+    <div key={index}>
+
+      <input className="border p-2 w-full mb-2"
+      placeholder="Certification Name"
+        value={cert}
+        onChange={(e) =>
+          handleCertificationChange(
+            index,
+            e.target.value
+          )
+        }
+      />
+
+      <button className="mt-3 bg-red-500 text-white px-3 py-1 rounded"
+        onClick={() =>
+          removeCertification(index)
+        }
+      >
+        Remove
+      </button>
+
+    </div>
+
+  )
+)}
+
+<button  className="bg-blue-600 text-white px-4 py-2 rounded" onClick={addCertification}>
+  + Add Certification
+</button>
+
+   <h3 className="text-xl font-bold mb-4">
            Experience
-        </h2>
+        </h3>
 
 {profile.experience.map((exp, index) => (
   <div
@@ -365,9 +512,9 @@ const handleProjectChange = (
   + Add Experience
 </button>
 
-<h2 className="text-xl font-bold mb-4">
+<h3 className="text-xl font-bold mb-4">
            Education
-</h2>
+</h3>
 
 {profile.education.map((edu, index) => (
   <div
@@ -446,9 +593,9 @@ const handleProjectChange = (
   + Add Education
 </button>
 
-<h2 className="text-xl font-bold mb-4">
+<h3 className="text-xl font-bold mb-4">
   Projects
-</h2>
+</h3>
 
 {profile.projects.map((project, index) => (
   <div
