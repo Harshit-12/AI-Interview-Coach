@@ -312,6 +312,12 @@ function ProfileView() {
         </button>
 
         <button
+          onClick={() => navigate("/upload")}
+          className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-lg"
+        >
+          Upload Updated Resume
+        </button>
+        <button
           onClick={downloadResume}
           className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg"
         >

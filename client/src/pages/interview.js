@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import API from "../services/api";
 import {useNavigate} from "react-router-dom";
-
+import { useRef } from "react";
 function Interview() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
@@ -14,7 +14,10 @@ function Interview() {
   const [loading, setLoading] = useState();
   const [username, setuserName] = useState("");
   const [isListening, setIsListening] = useState(false);
+  const [recorder, setRecorder] = useState(null);
+  const [answer, setAnswer] = useState("");
   const navigate = useNavigate();
+  const bottomRef = useRef(null);
   useEffect(() => {
     const initializeInterview = async () => {
       const fetchedProfile = await fetchProfile();
@@ -32,6 +35,11 @@ function Interview() {
   }
 }, [currentQuestion]);
 
+useEffect(() => {
+  bottomRef.current?.scrollIntoView({
+    behavior: "smooth"
+  });
+}, [messages]);
 // const speakQuestion = (text) => {
 //   speechSynthesis.cancel();
 
@@ -73,8 +81,85 @@ const speakQuestion = (text) => {
   };
 
 
+const startRecording = async () => {
 
+  const stream =
+    await navigator.mediaDevices.getUserMedia({
+      audio: true
+    });
 
+  const recorder =
+    new MediaRecorder(stream);
+
+  const chunks = [];
+
+  recorder.ondataavailable = (e) => {
+    chunks.push(e.data);
+  };
+
+  recorder.onstop = async () => {
+
+    const audioBlob =
+      new Blob(chunks, {
+        type: "audio/webm"
+      });
+
+    await transcribeAudio(audioBlob);
+  };
+
+  recorder.start();
+
+  setRecorder(recorder);
+};
+
+const stopRecording = () => {
+
+  if (recorder) {
+    recorder.stop();
+  };
+
+};
+
+const transcribeAudio = async (
+  audioBlob
+) => {
+
+  try {
+
+    const formData =
+      new FormData();
+
+    formData.append(
+      "audio",
+      audioBlob,
+      "answer.webm"
+    );
+
+    const res =
+      await API.post(
+        "/speech/transcribe",
+        formData,
+        {
+          headers: {
+            "Content-Type":
+              "multipart/form-data"
+          }
+        }
+      );
+
+    setAnswer(
+      res.data.text
+    );
+
+    console.log("Answer:", res.data.text);
+    setInput(input + res.data.text); 
+  } catch (error) {
+
+    console.error(error);
+
+  }
+
+};
 
 // Fetch User Profile 
 
@@ -176,7 +261,13 @@ const handleSend = async () => {
 
 };
 
+const handleInputChange = (e) => {
+  setAnswer(e.target.value);
 
+  e.target.style.height = "auto";
+  e.target.style.height =
+    e.target.scrollHeight + "px";
+};
 
 const handleMicClick = () => {
    const SpeechRecognition =
@@ -286,16 +377,16 @@ const handleEndInterview = async()=>{
         </button>
         </div>
       ))}
-
+          <div ref={bottomRef}></div>
     </div>
-
+      
     {/* Input */}
     <div className="flex gap-2">
  
     </div>
       <div className="flex items-end gap-2 bg-white p-3 rounded-xl shadow-md">
 
-  <textarea
+  {/* <textarea
    value={input}
      placeholder={loading ? "AI is thinking, please wait..." : "Type your answer here..."}
      disabled={loading} 
@@ -308,10 +399,60 @@ const handleEndInterview = async()=>{
   rows={1}
   // className="flex-1 border p-2 rounded-lg resize-none overflow-y-auto max-h-40"
   className="flex-1 border px-4 py-2 rounded-2xl resize-none overflow-y-auto max-h-32 bg-gray-50 focus:ring-2 focus:ring-black-300"
-   />
+  rows={4}
+  className="
+    w-full
+    min-h-[100px]
+    max-h-[300px]
+    resize-none
+    overflow-y-auto
+    rounded-2xl
+    border
+    border-gray-300
+    px-4
+    py-3
+    text-gray-800
+    focus:outline-none
+    focus:ring-2
+    focus:ring-blue-500
+    focus:border-blue-500
+    shadow-sm
+   /> */}
 
+
+<textarea
+  value={input}
+  // onChange={handleInputChange}
+  rows={4}
+   placeholder={loading ? "AI is thinking, please wait..." : "Type your answer here..."}
+     disabled={loading} 
+  onChange={(e) => {
+    setInput(e.target.value);
+
+    e.target.style.height = "auto";
+    e.target.style.height = e.target.scrollHeight + "px";
+  }}
+  className="
+    w-full
+    min-h-[100px]
+    max-h-[300px]
+    resize-none
+    overflow-y-auto
+    rounded-2xl
+    border
+    border-gray-300
+    px-4
+    py-3
+    text-gray-800
+    focus:outline-none
+    focus:ring-2
+    focus:ring-blue-500
+    focus:border-blue-500
+    shadow-sm
+  "
+/>
   {/* 🎤 Mic Button */}
-  <button
+  {/* <button
     onClick={handleMicClick}
     disabled={loading}
     className={`px-3 py-2 rounded-full ${
@@ -319,7 +460,38 @@ const handleEndInterview = async()=>{
     }`}
   >
     🎤
+  </button> */}
+
+  <div className="flex gap-3">
+
+  <button
+    onClick={startRecording}
+    className="
+      bg-green-600
+      text-white
+      px-4
+      py-2
+      rounded-lg
+    "
+  >
+    🎤 
   </button>
+
+  <button
+    onClick={stopRecording}
+    className="
+      bg-red-600
+      text-white
+      px-4
+      py-2
+      rounded-lg
+    "
+  >
+    ⏹ 
+  </button>
+
+</div>
+
   <button
     onClick={handleSend}
      

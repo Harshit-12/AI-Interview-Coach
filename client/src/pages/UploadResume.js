@@ -15,14 +15,28 @@ function UploadResume() {
     formData.append("resume", file);
 
     try {
+
+      const profile = await API.get("/profile");
+
+      const profileExists = profile.data.hasProfile ? profile.data.profile : null;
+
       setLoading(true);
 
         const res = await API.post("/resume/upload-resume", formData);
         console.log("Resume upload response: ", res.data);
         localStorage.setItem("sessionId", res.data.candidateProfile.userId);
         console.log("Session  id from resume upload: " + res.data.candidateProfile.userId);
-      setLoading(false);
-      navigate("/survey");
+        setLoading(false);
+
+        if (profileExists) {
+          // update scenario
+          navigate("/profile");
+        }
+        else{
+          // create scenario before inyerview
+            navigate("/survey");
+        }
+        
 
     } catch (error) {
       setLoading(false);

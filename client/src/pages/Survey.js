@@ -26,8 +26,11 @@ function Survey() {
     localStorage.setItem("survey", JSON.stringify(formData));
 
     console.log("Survey Data: ", formData);
+    const surveyData = formData;
+
     const profile = JSON.parse(localStorage.getItem("profile"));
-    const session = await API.post("/session/create", profile, formData);
+    console.log("Form Data to be sent to server: ", formData);
+    const session = await API.post("/session/create",{profile,  surveyData});
   
   const sesssionId = session.data.sessionId;
   localStorage.setItem("sessionId", sesssionId);

@@ -15,8 +15,10 @@ const interviewHistorySchema = new mongoose.Schema({
 });
 
 const surveySchema = new mongoose.Schema({
-  question: String,
-  answer: String
+  role: String,
+  experience: String,
+  techStack: [String],
+  difficulty: String
 });
 
 const interviewSessionSchema = new mongoose.Schema(

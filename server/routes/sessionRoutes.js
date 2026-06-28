@@ -27,12 +27,22 @@ router.get("/all", protect, async(req,res) =>{
 router.post("/create", protect, async (req, res) => {
   try {
     console.log("create hello");
-    const { profile, survey } = req.body;
-    const usuerDetails = req.user.userId;
-    console.log("User id : "+ usuerDetails);
+    const { profile, surveyData } = req.body;
+    console.log("SAMPLE req.body: ", req.body);
+    const surveyDataString = JSON.stringify(req.body.surveyData);
+    // console.log("Profile data in session route: ", profile);
+    console.log("Survey data in session route: ", surveyDataString);
+    const surveyDetails = req.body.surveyData;
+    const userId = req.user.userId;
+    console.log("User id : "+ userId);
     const newSession = new InterviewSession({
       userId: req.user.userId,
-      survey,
+      survey: {
+        role: surveyDetails.role,
+        experience: surveyDetails.experience,
+        techStack: surveyDetails.techStack,
+        difficulty: surveyDetails.difficulty
+      },
       interviewHistory: []  // empty initially
     });
 

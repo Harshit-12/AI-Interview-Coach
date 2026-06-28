@@ -35,21 +35,7 @@ router.get("/", protect, async (req, res) => {
   }
 });
 
-// router.put(
-//   "/update",
-//   protect,
-//   async (req, res) => {
 
-//     const updatedProfile =
-//       await UserProfile.findOneAndUpdate(
-//         { userId: req.user.userId },
-//         req.body,
-//         { new: true }
-//       );
-
-//     res.json(updatedProfile);
-//   }
-// );
 
 
 router.put("/update", protect, async (req, res) => {
@@ -63,6 +49,9 @@ router.put("/update", protect, async (req, res) => {
         $set: {
           name: req.body.name,
           email: req.body.email,
+          contactNumber: req.body.contactNumber,
+          githubUrl: req.body.githubUrl,
+          linkedinUrl: req.body.linkedinUrl,
           skills: req.body.skills,
           experience: req.body.experience,
           education: req.body.education,
