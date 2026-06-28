@@ -53,6 +53,7 @@ router.put("/update", protect, async (req, res) => {
           githubUrl: req.body.githubUrl,
           linkedinUrl: req.body.linkedinUrl,
           skills: req.body.skills,
+          certifications: req.body.certifications,
           experience: req.body.experience,
           education: req.body.education,
           projects: req.body.projects
