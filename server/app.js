@@ -19,7 +19,14 @@ const app = express();
 
 dns.setDefaultResultOrder("ipv4first");
 dns.setServers(["1.1.1.1", "8.8.8.8"]);
-app.use(cors());
+app.use(cors({
+    origin: [
+      "http://localhost:3000",
+      process.env.CLIENT_URL
+    ],
+    credentials: true
+  }));
+  
 app.use(express.json());
 
 
