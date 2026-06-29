@@ -20,13 +20,45 @@ const app = express();
 
 dns.setDefaultResultOrder("ipv4first");
 dns.setServers(["1.1.1.1", "8.8.8.8"]);
-app.use(cors({
-    origin: [
-      "http://localhost:3000",
-      process.env.CLIENT_URL
-    ],
+
+import cors from "cors";
+
+const allowedOrigins = [
+  "http://localhost:3000",
+  process.env.CLIENT_URL
+];
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+
+      console.log("Request Origin:", origin);
+      console.log("Allowed Origins:", allowedOrigins);
+
+      // Allow Postman, mobile apps, server-to-server requests
+      if (!origin) {
+        return callback(null, true);
+      }
+
+      if (allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("CORS Not Allowed"));
+      }
+
+    },
     credentials: true
-  }));
+  })
+);
+
+
+// app.use(cors({
+//     origin: [
+//       "http://localhost:3000",
+//       process.env.CLIENT_URL
+//     ],
+//     credentials: true
+//   }));
 
 app.use(express.json());
 
