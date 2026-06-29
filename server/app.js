@@ -23,33 +23,33 @@ dns.setServers(["1.1.1.1", "8.8.8.8"]);
 
 
 
-const allowedOrigins = [
-  "http://localhost:3000",
-  process.env.CLIENT_URL
-];
+// const allowedOrigins = [
+//   "http://localhost:3000",
+//   process.env.CLIENT_URL
+// ];
 
-app.use(
-  cors({
-    origin: function (origin, callback) {
+// app.use(
+//   cors({
+//     origin: function (origin, callback) {
 
-      console.log("Request Origin:", origin);
-      console.log("Allowed Origins:", allowedOrigins);
+//       console.log("Request Origin:", origin);
+//       console.log("Allowed Origins:", allowedOrigins);
 
-      // Allow Postman, mobile apps, server-to-server requests
-      if (!origin) {
-        return callback(null, true);
-      }
+//       // Allow Postman, mobile apps, server-to-server requests
+//       if (!origin) {
+//         return callback(null, true);
+//       }
 
-      if (allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("CORS Not Allowed"));
-      }
+//       if (allowedOrigins.includes(origin)) {
+//         callback(null, true);
+//       } else {
+//         callback(new Error("CORS Not Allowed"));
+//       }
 
-    },
-    credentials: true
-  })
-);
+//     },
+//     credentials: true
+//   })
+// );
 
 
 // app.use(cors({
@@ -60,6 +60,8 @@ app.use(
 //     credentials: true
 //   }));
 
+
+app.use(cors());
 app.use(express.json());
 
 
