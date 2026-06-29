@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import axios from "axios";
 import resumeRoutes from "./routes/resumeRoutes.js";
 import surveyRoutes from "./routes/surveyRoutes.js";
 import interviewRoutes from "./routes/interviewRoutes.js";
@@ -26,7 +27,7 @@ app.use(cors({
     ],
     credentials: true
   }));
-  
+
 app.use(express.json());
 
 
