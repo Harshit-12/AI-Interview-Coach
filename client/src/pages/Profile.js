@@ -266,7 +266,7 @@ const removeCertification = (index) => {
         "/profile/update",
         updatedData
       );
-
+      console.log(res.data);
       setLoading(false);
       
       alert("Profile updated successfully");

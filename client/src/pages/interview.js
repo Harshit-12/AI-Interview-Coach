@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback  } from "react";
 import API from "../services/api";
 import {useNavigate} from "react-router-dom";
 import { useRef } from "react";
@@ -13,7 +13,7 @@ function Interview() {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState();
   const [username, setuserName] = useState("");
-  const [isListening, setIsListening] = useState(false);
+  // const [isListening, setIsListening] = useState(false);
   const [recorder, setRecorder] = useState(null);
   const [answer, setAnswer] = useState("");
   const navigate = useNavigate();
@@ -25,7 +25,7 @@ function Interview() {
       startInterview();
     };
     initializeInterview();  
-  }, []);
+  }, [startInterview]);
 
 
 
@@ -70,7 +70,7 @@ const speakQuestion = (text) => {
 };
 
   //  Start Interview
-  const startInterview = () => {
+  const startInterview = useCallback(async () => {
     const greeting =  `Hi ${username}! Let's start the interview.\nCould you please tell me about yourself.`;
 
     setMessages([
@@ -78,7 +78,7 @@ const speakQuestion = (text) => {
     ]);
       setCurrentQuestion(greeting); 
       setcurrentAnswer(currentAnswer);
-  };
+  }, []);
 
 
 const startRecording = async () => {
@@ -261,53 +261,53 @@ const handleSend = async () => {
 
 };
 
-const handleInputChange = (e) => {
-  setAnswer(e.target.value);
+// const handleInputChange = (e) => {
+//   setAnswer(e.target.value);
 
-  e.target.style.height = "auto";
-  e.target.style.height =
-    e.target.scrollHeight + "px";
-};
+//   e.target.style.height = "auto";
+//   e.target.style.height =
+//     e.target.scrollHeight + "px";
+// };
 
-const handleMicClick = () => {
-   const SpeechRecognition =
-  window.SpeechRecognition || window.webkitSpeechRecognition;
+// const handleMicClick = () => {
+//    const SpeechRecognition =
+//   window.SpeechRecognition || window.webkitSpeechRecognition;
 
-  const recognition = new SpeechRecognition();
+//   const recognition = new SpeechRecognition();
 
-  recognition.continuous = false;
-  recognition.interimResults = true;
-  recognition.lang = "en-US";
+//   recognition.continuous = false;
+//   recognition.interimResults = true;
+//   recognition.lang = "en-US";
 
-  if (!SpeechRecognition) {
-    alert("Speech Recognition not supported in this browser");
-    return;
-  }
+//   if (!SpeechRecognition) {
+//     alert("Speech Recognition not supported in this browser");
+//     return;
+//   }
 
-  setIsListening(true);
-  recognition.start();
+//   setIsListening(true);
+//   recognition.start();
 
-  recognition.onresult = (event) => {
-    var transcript = event.results[0][0].transcript;
-    console.log("Transcript: ", transcript);
-    console.log("Current Input before update: ", input);
-    // setInput((prev) => prev + " " + transcript); // append text
-    // transcript="";
+//   recognition.onresult = (event) => {
+//     var transcript = event.results[0][0].transcript;
+//     console.log("Transcript: ", transcript);
+//     console.log("Current Input before update: ", input);
+//     // setInput((prev) => prev + " " + transcript); // append text
+//     // transcript="";
  
-    setInput(input + " " + transcript); // replace text
-    setIsListening(false);
-    transcript="";
-  };
+//     setInput(input + " " + transcript); // replace text
+//     setIsListening(false);
+//     transcript="";
+//   };
 
-  recognition.onerror = (err) => {
-    console.error(err);
-    setIsListening(false);
-  };
+//   recognition.onerror = (err) => {
+//     console.error(err);
+//     setIsListening(false);
+//   };
 
-  recognition.onend = () => {
-    setIsListening(false);
-  };
-};
+//   recognition.onend = () => {
+//     setIsListening(false);
+//   };
+// };
 
 // Evaluate answer and save to DB
 const handleEvaluation = async (userAnswer, profile) => {
@@ -473,6 +473,7 @@ const handleEndInterview = async()=>{
       py-2
       rounded-lg
     "
+  
   >
     🎤 
   </button>
