@@ -25,7 +25,7 @@ function Interview() {
       startInterview();
     };
     initializeInterview();  
-  }, [startInterview]);
+  }, []);
 
 
 
