@@ -346,6 +346,13 @@ const handleEndInterview = async()=>{
    navigate("/evaluate"); 
   
 }
+
+const handleInputChange = (e) => {
+  setInput(e.target.value);
+
+  e.target.style.height = "auto";
+  e.target.style.height = `${e.target.scrollHeight}px`;
+};
   return (
    
     <div className="bg-gray-100 min-h-screen flex flex-col items-center p-6">
@@ -385,7 +392,84 @@ const handleEndInterview = async()=>{
  
     </div>
       <div className="flex items-end gap-2 bg-white p-3 rounded-xl shadow-md">
+<div className="w-full mt-6">
 
+  {/* Text Area */}
+  <textarea
+    value={input}
+    onChange={handleInputChange}
+    placeholder="Type your response here or use voice input..."
+    rows={4}
+    className="
+      w-full
+      min-h-[100px]
+      max-h-[300px]
+      p-4
+      border
+      border-gray-300
+      rounded-2xl
+      shadow-sm
+      focus:outline-none
+      focus:ring-2
+      focus:ring-blue-500
+      resize-none
+      overflow-y-auto
+      text-gray-700
+      placeholder-gray-400
+    "
+  />
+
+  {/* Buttons */}
+  <div className="mt-4 flex flex-wrap gap-3 justify-center">
+
+    <button
+      onClick={startRecording}
+      className="
+        px-5
+        py-2
+        bg-green-500
+        hover:bg-green-600
+        text-white
+        rounded-xl
+        transition
+      "
+    >
+      🎤 Speak
+    </button>
+
+    <button
+      onClick={stopRecording}
+      className="
+        px-5
+        py-2
+        bg-red-500
+        hover:bg-red-600
+        text-white
+        rounded-xl
+        transition
+      "
+    >
+      ⏹ Stop
+    </button>
+
+    <button
+      onClick={handleSend}
+      className="
+        px-5
+        py-2
+        bg-blue-600
+        hover:bg-blue-700
+        text-white
+        rounded-xl
+        transition
+      "
+    >
+      📤 Send Response
+    </button>
+
+  </div>
+
+</div>
   {/* <textarea
    value={input}
      placeholder={loading ? "AI is thinking, please wait..." : "Type your answer here..."}
@@ -420,7 +504,7 @@ const handleEndInterview = async()=>{
    /> */}
 
 
-<textarea
+{/* <textarea
   value={input}
   // onChange={handleInputChange}
   rows={4}
@@ -462,7 +546,7 @@ const handleEndInterview = async()=>{
     🎤
   </button> */}
 
-  <div className="flex gap-3">
+  {/* <div className="flex gap-3">
 
   <button
     onClick={startRecording}
@@ -475,7 +559,7 @@ const handleEndInterview = async()=>{
     "
   
   >
-    🎤 
+    🎤 Speak
   </button>
 
   <button
@@ -488,7 +572,7 @@ const handleEndInterview = async()=>{
       rounded-lg
     "
   >
-    ⏹ 
+    ⏹ Stop
   </button>
 
 </div>
@@ -499,10 +583,10 @@ const handleEndInterview = async()=>{
     className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
     disabled={loading} 
   >
-    Send
-  </button>
+    Send Response
+  </button> */}
 
-</div>
+</div> 
     {/* End Button */}
     <button
       onClick={handleEndInterview}
