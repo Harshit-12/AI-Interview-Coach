@@ -6,7 +6,7 @@ function ProfileView() {
 
   const [profile, setProfile] = useState(null);
   const navigate = useNavigate();
-
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchProfile();
@@ -16,11 +16,19 @@ function ProfileView() {
     try {
       const res = await API.get("/profile");
 
+    if (res.data.profile) {
       setProfile(res.data.profile);
+    } else {
+      setProfile(null);
+    }
 
     } catch (error) {
+      setProfile(null);
       console.error(error);
-    }
+    
+    } finally {
+    setLoading(false);
+  }
   };
 
   const downloadResume = async () => {
@@ -45,13 +53,113 @@ function ProfileView() {
 };
 
 
-  if (!profile) {
-    return (
-      <div className="p-10">
-        Loading...
+  if (loading) {
+  return (
+    <div className="min-h-screen flex items-center justify-center">
+      <div className="flex flex-col items-center gap-4">
+
+        <div className="
+          w-12
+          h-12
+          border-4
+          border-blue-500
+          border-t-transparent
+          rounded-full
+          animate-spin
+        " />
+
+        <p className="text-gray-500">
+          Loading your profile...
+        </p>
+
       </div>
-    );
-  }
+    </div>
+  );
+}
+
+if (!profile) {
+  return (
+    <div className="
+      min-h-screen
+      flex
+      items-center
+      justify-center
+      bg-gray-50
+      px-4
+    ">
+
+      <div className="
+        bg-white
+        shadow-xl
+        rounded-3xl
+        p-10
+        max-w-md
+        text-center
+      ">
+
+        <div className="text-6xl mb-4">
+          👤
+        </div>
+
+        <h2 className="
+          text-2xl
+          font-bold
+          text-gray-800
+        ">
+          Create Your Profile
+        </h2>
+
+        <p className="
+          text-gray-500
+          mt-3
+          leading-relaxed
+        ">
+          You haven't created your profile yet.
+          Add your education, experience, projects,
+          and skills to start practicing AI interviews.
+        </p>
+
+        <button
+          onClick={() => navigate("/profile/edit")}
+          className="
+            mt-6
+            bg-blue-600
+            hover:bg-blue-700
+            text-white
+            px-6
+            py-3
+            rounded-xl
+            shadow-md
+            transition
+            w-full
+          "
+        >
+          ✨ Create Profile Now
+        </button>
+
+        <button
+          onClick={() => navigate("/upload")}
+          className="
+            mt-3
+            border
+            border-gray-300
+            hover:bg-gray-100
+            text-gray-700
+            px-6
+            py-3
+            rounded-xl
+            transition
+            w-full
+          "
+        >
+          📄 Upload Resume Instead
+        </button>
+
+      </div>
+
+    </div>
+  );
+}
 
   return (
     <div className="bg-gray-100 min-h-screen p-6">

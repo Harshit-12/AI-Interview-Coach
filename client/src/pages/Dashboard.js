@@ -231,9 +231,10 @@ return (
     </h2>
 
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-
+      <Link to="/my-interviews">
+      
       <div
-        onClick={handleStartInterview}
+       
         className="cursor-pointer bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition"
       >
         <h3 className="text-lg font-semibold text-blue-600">
@@ -244,7 +245,7 @@ return (
            Track interview trends and scores.
         </p>
       </div>
-
+      </Link>
       <Link
         to="/profile"
         className="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition"

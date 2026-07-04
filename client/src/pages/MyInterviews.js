@@ -5,7 +5,7 @@ import API from "../services/api";
 function MyInterviews() {
   const [sessions, setSessions] = useState([]);
   const navigate = useNavigate();
-
+  const [loading, setLoading]= useState(true);
   useEffect(() => {
     fetchSessions();
   }, []);
@@ -18,11 +18,63 @@ function MyInterviews() {
     } catch (error) {
       console.error(error);
     }
+    finally{
+      setLoading(false);
+    }
   };
 
+      const handleStartInterview = async () => {
+  try {
+    // const res = await API.get("/session/check-profile");
+    
+    const res = await API.get("/profile/");
+
+    console.log("Profile check response: ", res.data);
+
+    const profile = res.data.profile;
+
+    if (res.data.hasProfile) {
+      // ✅ Use existing profile
+      localStorage.setItem("profile", JSON.stringify(profile));
+      localStorage.setItem("sessionId", res.data.profile.userId);
+      console.log("Session  id : " + res.data.sessionId);
+      navigate("/survey"); // or directly /interview if you want
+    } else {
+      // ❌ No profile → upload resume
+      navigate("/upload");
+    }
+
+  } catch (error) {
+    console.error(error);
+  }
+};
   const handleViewSession = (sessionId) => {
     navigate(`/evaluation/${sessionId}`);
   };
+
+  if (loading) {
+  return (
+    <div className="min-h-screen flex items-center justify-center">
+      <div className="flex flex-col items-center gap-4">
+
+        <div className="
+          w-12
+          h-12
+          border-4
+          border-blue-500
+          border-t-transparent
+          rounded-full
+          animate-spin
+        " />
+
+        <p className="text-gray-500">
+          Loading your interviews...
+        </p>
+
+      </div>
+    </div>
+  );
+}
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">
@@ -167,32 +219,96 @@ function MyInterviews() {
         </div>
       ) : (
 
-        <div className="text-center py-16">
+        <div className="
+  min-h-[70vh]
+  flex
+  items-center
+  justify-center
+  px-4
+">
 
-          <h3 className="text-xl font-semibold text-gray-700">
-            No Interviews Yet
-          </h3>
+  <div className="
+    bg-white
+    shadow-xl
+    rounded-3xl
+    p-10
+    max-w-md
+    w-full
+    text-center
+    border
+    border-gray-100
+  ">
 
-          <p className="text-gray-500 mt-2">
-            Start your first AI interview to see history here.
-          </p>
+    {/* Empty State Icon */}
+    <div className="text-6xl mb-4">
+      
+    </div>
 
-          <button
-            onClick={() => navigate("/dashboard")}
-            className="
-              mt-4
-              bg-blue-600
-              text-white
-              px-6
-              py-3
-              rounded-lg
-              hover:bg-blue-700
-            "
-          >
-            Start Interview
-          </button>
+    <h3 className="
+      text-2xl
+      font-bold
+      text-gray-800
+    ">
+      No Interviews Yet
+    </h3>
 
-        </div>
+    <p className="
+      text-gray-500
+      mt-3
+      leading-relaxed
+    ">
+      Start your first AI interview to practice,
+      improve your skills, and track your progress.
+    </p>
+
+    <button
+      onClick={handleStartInterview}
+      className="
+        mt-8
+        w-full
+        bg-blue-600
+        text-white
+        py-3
+        rounded-xl
+        font-medium
+        shadow-md
+        hover:bg-blue-700
+        hover:shadow-lg
+        transition
+      "
+    >
+      🚀 Start Your First Interview
+    </button>
+
+  </div>
+
+</div>
+        // <div className="text-center py-16">
+
+        //   <h3 className="text-xl font-semibold text-gray-700">
+        //     No Interviews Yet
+        //   </h3>
+
+        //   <p className="text-gray-500 mt-2">
+        //     Start your first AI interview to see history here.
+        //   </p>
+
+        //   <button
+        //     onClick={handleStartInterview}
+        //     className="
+        //       mt-4
+        //       bg-blue-600
+        //       text-white
+        //       px-6
+        //       py-3
+        //       rounded-lg
+        //       hover:bg-blue-700
+        //     "
+        //   >
+        //     Start Interview
+        //   </button>
+
+        // </div>
 
       )}
 
