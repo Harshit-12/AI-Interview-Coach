@@ -17,6 +17,8 @@ function Interview() {
   const [recorder, setRecorder] = useState(null);
   const [answer, setAnswer] = useState("");
   const navigate = useNavigate();
+  const [listen,setListen] = useState(false);
+
   const bottomRef = useRef(null);
   useEffect(() => {
     const initializeInterview = async () => {
@@ -40,6 +42,8 @@ useEffect(() => {
     behavior: "smooth"
   });
 }, [messages]);
+
+
 // const speakQuestion = (text) => {
 //   speechSynthesis.cancel();
 
@@ -83,6 +87,7 @@ const speakQuestion = (text) => {
 
 const startRecording = async () => {
 
+  setListen(true);
   const stream =
     await navigator.mediaDevices.getUserMedia({
       audio: true
@@ -113,6 +118,7 @@ const startRecording = async () => {
 };
 
 const stopRecording = () => {
+  setListen(false);
 
   if (recorder) {
     recorder.stop();
@@ -398,7 +404,7 @@ const handleInputChange = (e) => {
   <textarea
     value={input}
     onChange={handleInputChange}
-    placeholder="Type your response here or use voice input..."
+    placeholder={loading ? "AI is thinking, please wait..." : "Type your response here or use voice input..."}
     rows={4}
     className="
       w-full
@@ -424,6 +430,7 @@ const handleInputChange = (e) => {
 
     <button
       onClick={startRecording}
+      disabled={loading}
       className="
         px-5
         py-2
@@ -434,11 +441,12 @@ const handleInputChange = (e) => {
         transition
       "
     >
-      🎤 Speak
+      {listen? "👂 Listening":  "🎤 Speak"}
     </button>
-
+      {listen &&
     <button
       onClick={stopRecording}
+      disabled={loading}
       className="
         px-5
         py-2
@@ -449,11 +457,12 @@ const handleInputChange = (e) => {
         transition
       "
     >
-      ⏹ Stop
+     ⏹ Stop
     </button>
-
+}
     <button
       onClick={handleSend}
+      disabled={loading}
       className="
         px-5
         py-2
@@ -559,7 +568,7 @@ const handleInputChange = (e) => {
     "
   
   >
-    🎤 Speak
+  {listen}? "👂 Listening":  "🎤 Speak"
   </button>
 
   <button
