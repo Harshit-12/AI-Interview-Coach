@@ -11,6 +11,7 @@ import MyInterviews from "./pages/MyInterviews";
 import Evaluate from "./pages/Evaluate";
 import Navbar from "./components/Navbar";
 import Profile from "./pages/Profile";
+import PerformanceInsights from "./pages/PerformanceInsights";
 import ProfileView from "./pages/ProfileView";  
 function App() {
   const token = localStorage.getItem("token");
@@ -47,6 +48,15 @@ function App() {
             <Evaluate />
           </ProtectedRoute>
         } />
+        
+        <Route
+        path="/performance"
+        element={
+          <ProtectedRoute>
+            <PerformanceInsights />
+          </ProtectedRoute>}
+        />
+        
         <Route path="/evaluation/:sessionId" element={
           <ProtectedRoute>
             <Evaluation />
