@@ -11,13 +11,15 @@ function Interview() {
   const survey = JSON.parse(localStorage.getItem("survey"));
   const sessionId = localStorage.getItem("sessionId");
   const [profile, setProfile] = useState(null);
-  const [loading, setLoading] = useState();
+  const [sessions, setSessions] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [username, setuserName] = useState("");
   // const [isListening, setIsListening] = useState(false);
   const [recorder, setRecorder] = useState(null);
   const [answer, setAnswer] = useState("");
   const navigate = useNavigate();
   const [listen,setListen] = useState(false);
+  const [report, setReport] = useState("dummy");
 
   const bottomRef = useRef(null);
   useEffect(() => {
@@ -29,6 +31,7 @@ function Interview() {
     initializeInterview();  
   }, []);
 
+  
 
 
   useEffect(() => {
@@ -42,6 +45,14 @@ useEffect(() => {
     behavior: "smooth"
   });
 }, [messages]);
+
+useEffect(() => {
+    fetchSessions();
+  }, []);
+
+  useEffect(() => {
+    
+  }, [report]);
 
 
 // const speakQuestion = (text) => {
@@ -59,6 +70,19 @@ useEffect(() => {
 //   speechSynthesis.speak(utterance);
 // };
 
+
+ const fetchSessions = async () => {
+    try {
+      const res = await API.get("/session/all");
+      setSessions(res.data);
+      console.log("Fetched sessions:", res.data);
+    } catch (error) {
+      console.error(error);
+    }
+    finally{
+      setLoading(false);
+    }
+  };
 const speakQuestion = (text) => {
   speechSynthesis.cancel();
 
@@ -342,14 +366,47 @@ const handleEvaluation = async (userAnswer, profile) => {
 
 }
 
+// const handleAICoachGeneration = async () => {
+//     // Fetch the nuimber of answered questions
+    
+//     const answeredQuestions = interviewHistory.filter(
+//     item => item.answer && item.answer.trim() !== ""
+//   );
+
+//   if (answeredQuestions.length < 3) {
+//     return;
+//   }
+
+
+// }
 // finish interview 
 const handleEndInterview = async()=>{
     // save interview session data
 
+  setReport(null); // Reset report state before generating a new one
+  // const answeredQuestions = sessions.interviewHistory.filter(
+  //   item => item.answer && item.answer.trim() !== ""
+  // );
+  
+    try {
+       const report = await API.post("/career-coach/generate", {
+      // userId: req.user.userId
+    });
+    setReport(report.data.report);
+    console.log("Career Coach Report Generated:", report.data.report);
+    } catch (error) {
+      console.log("Error generating Career Coach report:", error);
+    }
+    finally{
+
+        // navigate to evaluation page
+          navigate("/evaluate"); 
+    }
 
 
-    // navigate to evaluation page
-   navigate("/evaluate"); 
+
+
+
   
 }
 
@@ -359,6 +416,30 @@ const handleInputChange = (e) => {
   e.target.style.height = "auto";
   e.target.style.height = `${e.target.scrollHeight}px`;
 };
+
+  if (!report){
+     return (
+    <div className="min-h-screen flex items-center justify-center">
+      <div className="flex flex-col items-center gap-4">
+
+        <div className="
+          w-12
+          h-12
+          border-4
+          border-blue-500
+          border-t-transparent
+          rounded-full
+          animate-spin
+        " />
+
+        <p className="text-gray-500">
+         Saving Interview ...
+        </p>
+
+      </div>
+    </div>
+  );
+  }
   return (
    
     <div className="bg-gray-100 min-h-screen flex flex-col items-center p-6">
@@ -406,6 +487,7 @@ const handleInputChange = (e) => {
     onChange={handleInputChange}
     placeholder={loading ? "AI is thinking, please wait..." : "Type your response here or use voice input..."}
     rows={4}
+    disabled={loading}
     className="
       w-full
       min-h-[100px]

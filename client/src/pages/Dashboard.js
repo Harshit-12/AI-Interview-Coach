@@ -260,7 +260,7 @@ return (
       </Link>
 
       <Link
-        to="/upload"
+        to="/career-coach"
         className="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition"
       >
         <h3 className="text-lg font-semibold text-purple-600">

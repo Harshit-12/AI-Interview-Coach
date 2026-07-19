@@ -23,7 +23,7 @@ function MyInterviews() {
     }
   };
 
-      const handleStartInterview = async () => {
+const handleStartInterview = async () => {
   try {
     // const res = await API.get("/session/check-profile");
     
@@ -48,6 +48,7 @@ function MyInterviews() {
     console.error(error);
   }
 };
+
   const handleViewSession = (sessionId) => {
     navigate(`/evaluation/${sessionId}`);
   };

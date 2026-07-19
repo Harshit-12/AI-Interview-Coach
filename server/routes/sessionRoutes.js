@@ -48,7 +48,8 @@ router.post("/create", protect, async (req, res) => {
 
     const savedSession = await newSession.save();
 
-    console.log("testing");
+    
+    console.log("testing"); 
     res.json({
       sessionId: savedSession._id,
       message: "Interview session created successfully 🟢"

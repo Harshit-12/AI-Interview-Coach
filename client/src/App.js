@@ -13,6 +13,8 @@ import Navbar from "./components/Navbar";
 import Profile from "./pages/Profile";
 import PerformanceInsights from "./pages/PerformanceInsights";
 import ProfileView from "./pages/ProfileView";  
+import CareerCoach from "./pages/CareerCoach";
+
 function App() {
   const token = localStorage.getItem("token");
   return (
@@ -84,6 +86,15 @@ function App() {
         </ProtectedRoute>
         }
 />
+
+            <Route
+         path="/career-coach"
+          element={
+        <ProtectedRoute>
+          <CareerCoach />
+        </ProtectedRoute>
+        }
+      />
       </Routes>
     </Router>
     </>
