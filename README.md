@@ -8,6 +8,10 @@ Unlike traditional mock interview platforms, AI Interview Coach continuously lea
 
 ---
 
+# Dashboard 
+
+https://github.com/Harshit-12/AI-Interview-Coach/blob/main/images/Dashboard.png
+
 # 🚀 Features
 
 ## 🎤 AI-Powered Mock Interviews
@@ -21,6 +25,11 @@ Unlike traditional mock interview platforms, AI Interview Coach continuously lea
 
 ---
 
+# AI Interview Page
+
+https://github.com/Harshit-12/AI-Interview-Coach/blob/main/images/Ai%20Interview.png
+
+
 ## 📄 Resume Management
 
 * Upload resume (PDF)
@@ -32,6 +41,11 @@ Unlike traditional mock interview platforms, AI Interview Coach continuously lea
 * Download resume as PDF
 
 ---
+
+# Update Resume
+
+https://github.com/Harshit-12/AI-Interview-Coach/blob/main/images/update%20reume.png
+
 
 ## 👤 Smart Candidate Profile
 
@@ -50,6 +64,11 @@ Manage your professional profile including:
 Optional fields are automatically hidden if not provided.
 
 ---
+
+# Profile Page
+
+https://github.com/Harshit-12/AI-Interview-Coach/blob/main/images/my%20profile.png
+
 
 ## 🧠 AI Interview Evaluation
 
@@ -73,6 +92,12 @@ The AI provides:
 
 ---
 
+# Interview Evaulation 
+
+https://github.com/Harshit-12/AI-Interview-Coach/blob/main/images/interview%20report%201.png
+
+https://github.com/Harshit-12/AI-Interview-Coach/blob/main/images/interview%20report%202.png
+
 ## 📊 Performance Insights
 
 Track your interview performance over time.
@@ -89,6 +114,10 @@ Features include:
 Visual analytics help candidates understand their progress.
 
 ---
+
+# Performance
+https://github.com/Harshit-12/AI-Interview-Coach/blob/main/images/performance%20insights.png
+
 
 ## 🤖 AI Career Coach
 
@@ -109,6 +138,11 @@ The AI analyzes all completed interviews and generates a comprehensive career co
 
 ---
 
+# AI Coach 
+
+https://github.com/Harshit-12/AI-Interview-Coach/blob/main/images/Ai%20coach%201.png
+
+
 ### Personalized Learning Roadmap
 
 The AI generates a week-by-week study plan including:
@@ -119,6 +153,11 @@ The AI generates a week-by-week study plan including:
 * Recommended Topics
 
 ---
+
+# Roadmap
+
+https://github.com/Harshit-12/AI-Interview-Coach/blob/main/images/Ai%20Coach%202.png
+
 
 ### Recommended Free Learning Resources
 
@@ -138,30 +177,10 @@ Examples include:
 
 ---
 
-### AI Career Advice
+# Resources
 
-Receive personalized guidance including:
+https://github.com/Harshit-12/AI-Interview-Coach/blob/main/images/Ai%20coach%203.png
 
-* Interview Readiness
-* Career Growth Suggestions
-* Next Interview Focus
-* Motivation
-* Long-Term Improvement Strategy
-
----
-
-## 📈 Adaptive Learning
-
-The platform continuously improves recommendations based on:
-
-* Previous Interviews
-* Candidate Performance
-* AI Evaluations
-* Strengths
-* Weaknesses
-* Learning Progress
-
----
 
 # 🏗️ System Architecture
 
@@ -486,6 +505,10 @@ REACT_APP_API_URL=
 ```
 
 ---
+
+## Try it Live
+
+https://ai-interview-coach-7hk7.vercel.app/
 
 # 🤝 Contributing
 
