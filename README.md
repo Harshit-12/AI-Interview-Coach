@@ -14,6 +14,11 @@ Unlike traditional mock interview platforms, AI Interview Coach continuously lea
 <img width="1890" height="922" alt="Dashboard" src="https://github.com/user-attachments/assets/d7f002fc-87bf-424b-8fd8-ec7c53d22486" />
 
 
+# My Interviews
+
+<img width="1892" height="911" alt="my interviews" src="https://github.com/user-attachments/assets/14c38edd-fa02-476d-aea0-a27f9cb5ea5c" />
+
+
 # 🚀 Features
 
 ## 🎤 AI-Powered Mock Interviews
@@ -29,7 +34,8 @@ Unlike traditional mock interview platforms, AI Interview Coach continuously lea
 
 # AI Interview Page
 
-https://github.com/Harshit-12/AI-Interview-Coach/blob/main/images/Ai%20Interview.png
+<img width="1871" height="892" alt="Ai Interview" src="https://github.com/user-attachments/assets/bf664f04-9e20-4afa-8e1f-bd1a9b49eebf" />
+
 
 
 ## 📄 Resume Management
@@ -46,7 +52,8 @@ https://github.com/Harshit-12/AI-Interview-Coach/blob/main/images/Ai%20Interview
 
 # Update Resume
 
-https://github.com/Harshit-12/AI-Interview-Coach/blob/main/images/update%20reume.png
+<img width="1912" height="842" alt="update reume" src="https://github.com/user-attachments/assets/bf31f0d6-d359-455d-88d6-e597a7a801e5" />
+
 
 
 ## 👤 Smart Candidate Profile
@@ -69,7 +76,8 @@ Optional fields are automatically hidden if not provided.
 
 # Profile Page
 
-https://github.com/Harshit-12/AI-Interview-Coach/blob/main/images/my%20profile.png
+<img width="1887" height="905" alt="my profile" src="https://github.com/user-attachments/assets/7f6ae04f-545f-4cdd-ad0a-0d1f5ff29610" />
+
 
 
 ## 🧠 AI Interview Evaluation
@@ -96,9 +104,8 @@ The AI provides:
 
 # Interview Evaulation 
 
-https://github.com/Harshit-12/AI-Interview-Coach/blob/main/images/interview%20report%201.png
-
-https://github.com/Harshit-12/AI-Interview-Coach/blob/main/images/interview%20report%202.png
+<img width="1877" height="916" alt="interview report 1" src="https://github.com/user-attachments/assets/6b157f33-6f50-49f5-80e6-5992a868d1e8" />
+<img width="1887" height="777" alt="interview report 2" src="https://github.com/user-attachments/assets/c7e905d3-c5df-4f9e-bafd-305875a3aaca" />
 
 ## 📊 Performance Insights
 
@@ -118,7 +125,8 @@ Visual analytics help candidates understand their progress.
 ---
 
 # Performance
-https://github.com/Harshit-12/AI-Interview-Coach/blob/main/images/performance%20insights.png
+<img width="1901" height="816" alt="performance insights" src="https://github.com/user-attachments/assets/6e1569ce-bf19-4204-a121-6be7fe348da1" />
+
 
 
 ## 🤖 AI Career Coach
@@ -142,7 +150,8 @@ The AI analyzes all completed interviews and generates a comprehensive career co
 
 # AI Coach 
 
-https://github.com/Harshit-12/AI-Interview-Coach/blob/main/images/Ai%20coach%201.png
+<img width="1882" height="902" alt="Ai coach 1" src="https://github.com/user-attachments/assets/dd491c24-7f0a-449e-a1af-c08739de8420" />
+
 
 
 ### Personalized Learning Roadmap
@@ -158,7 +167,8 @@ The AI generates a week-by-week study plan including:
 
 # Roadmap
 
-https://github.com/Harshit-12/AI-Interview-Coach/blob/main/images/Ai%20Coach%202.png
+<img width="1697" height="907" alt="Ai Coach 2" src="https://github.com/user-attachments/assets/f0a6f6af-0079-45fc-bb60-793affec250e" />
+
 
 
 ### Recommended Free Learning Resources
@@ -181,7 +191,8 @@ Examples include:
 
 # Resources
 
-https://github.com/Harshit-12/AI-Interview-Coach/blob/main/images/Ai%20coach%203.png
+<img width="1827" height="902" alt="Ai coach 3" src="https://github.com/user-attachments/assets/7765d31b-2dd5-4005-a3f9-95eef83eaa27" />
+
 
 
 # 🏗️ System Architecture
