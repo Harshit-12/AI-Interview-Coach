@@ -10,7 +10,9 @@ Unlike traditional mock interview platforms, AI Interview Coach continuously lea
 
 # Dashboard 
 
-https://github.com/Harshit-12/AI-Interview-Coach/blob/main/images/Dashboard.png
+
+<img width="1890" height="922" alt="Dashboard" src="https://github.com/user-attachments/assets/d7f002fc-87bf-424b-8fd8-ec7c53d22486" />
+
 
 # 🚀 Features
 
